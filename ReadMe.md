@@ -64,7 +64,7 @@ pip install -r requirements.txt
 ```bash
 python3 server.py --host <HOST> --port <PORT> --max-workers <MAX_WORKERS>
 ```
-#### Example
+#### Example:
 ```bash
 python3 server.py --host 127.0.0.1 --port 65432 --max-workers 20
 ```
@@ -73,7 +73,7 @@ python3 server.py --host 127.0.0.1 --port 65432 --max-workers 20
 ```
 python3 client.py --host <HOST> --port <PORT>
 ```
- #### Example
+ #### Example:
  ```
 python3 client.py --host 127.0.0.1 --port 65432
 ```
