@@ -53,22 +53,29 @@ A simple TCP client-server application in Python that allows multiple clients to
 
 ### Installation
 - Clone the Repository
-```
+```bash
 git clone https://github.com/yourusername/tcp-client-server.git
 ```
 ### Install Dependencies
-```
+```bash
 pip install -r requirements.txt
 ```
 ### Running the Server
-```
+```bash
 python3 server.py --host <HOST> --port <PORT> --max-workers <MAX_WORKERS>
-Example
+```
+#### Example
+```bash
 python3 server.py --host 127.0.0.1 --port 65432 --max-workers 20
 ```
+
 ### Running the Client
 ```
 python3 client.py --host <HOST> --port <PORT>
+```
+ #### Example
+ ```
+python3 client.py --host 127.0.0.1 --port 65432
 ```
 
 ### Sending Messages
