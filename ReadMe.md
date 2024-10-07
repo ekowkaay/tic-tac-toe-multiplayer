@@ -64,7 +64,6 @@ This project uses only Python's standard library modules and does not require an
 
 The `requirements.txt` file is included to indicate that there are no external dependencies. It is empty because all the necessary modules are part of the Python standard library.
 
-```
 ### Running the Server
 ```bash
 python3 server.py --host <HOST> --port <PORT> --max-workers <MAX_WORKERS>
