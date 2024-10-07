@@ -54,7 +54,7 @@ A simple TCP client-server application in Python that allows multiple clients to
 ### Installation
 - Clone the Repository
 ```bash
-git clone https://github.com/yourusername/tcp-client-server.git
+[git clone https://github.com/yourusername/tcp-client-server.git](https://github.com/ekowkaay/tic-tac-toe-multiplayer.git)
 ```
 ### Install Dependencies
 ```bash
