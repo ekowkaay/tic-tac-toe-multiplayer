@@ -56,9 +56,14 @@ A simple TCP client-server application in Python that allows multiple clients to
 ```bash
 [git clone https://github.com/yourusername/tcp-client-server.git](https://github.com/ekowkaay/tic-tac-toe-multiplayer.git)
 ```
-### Install Dependencies
-```bash
-pip install -r requirements.txt
+### Dependencies
+
+This project uses only Python's standard library modules and does not require any external packages.
+
+## Requirements File
+
+The `requirements.txt` file is included to indicate that there are no external dependencies. It is empty because all the necessary modules are part of the Python standard library.
+
 ```
 ### Running the Server
 ```bash
