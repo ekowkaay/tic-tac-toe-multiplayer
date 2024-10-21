@@ -55,13 +55,13 @@ class Game:
 
     def current_player_username(self):
         client_socket = self.players[self.current_player_index]
-        return self.server.clients[client_socket]['username']
+        return self.server.clients[client_socket.fileno()]['username']
 
     def winner_username(self):
         if self.winner == 'draw':
             return 'draw'
         elif self.winner:
-            return self.server.clients[self.winner]['username']
+            return self.server.clients[self.winner.fileno()]['username']
         else:
             return None
 
@@ -75,7 +75,7 @@ class Server:
         self.is_running = True
         self.max_workers = max_workers
         self.setup_server_socket()
-        self.clients = {}  # key: client_socket, value: {'username': ..., 'game_id': ..., 'symbol': ...}
+        self.clients = {}  # key: client_socket.fileno(), value: {'socket': client_socket, 'username': ..., 'game_id': ..., 'symbol': ...}
         self.games = {}    # key: game_id, value: Game instance
         self.waiting_client = None  # A client waiting for an opponent
 
@@ -93,8 +93,9 @@ class Server:
     def send_message(self, client_socket, message):
         try:
             client_socket.sendall(json.dumps(message).encode('utf-8'))
+            logging.debug(f"Sent to {client_socket.getpeername()}: {message}")
         except socket.error as e:
-            logging.error(f"Error sending message to {client_socket}: {e}")
+            logging.error(f"Error sending message to {client_socket.getpeername()}: {e}")
 
     def send_error(self, client_socket, code, message):
         error_message = {
@@ -114,27 +115,35 @@ class Server:
             new_game.players.append(self.waiting_client)
             new_game.players.append(client_socket)
             self.games[game_id] = new_game
-            # Update client info
-            waiting_username = self.clients[self.waiting_client]['username']
-            self.clients[self.waiting_client]['game_id'] = game_id
-            self.clients[client_socket] = {'username': username, 'game_id': game_id}
-            self.waiting_client = None
 
-            # Assign symbols
+            # Update client info
+            waiting_fd = self.waiting_client.fileno()
+            client_fd = client_socket.fileno()
+            waiting_username = self.clients[waiting_fd]['username']
+            self.clients[waiting_fd]['game_id'] = game_id
+            self.clients[client_fd] = {'socket': client_socket, 'username': username, 'game_id': game_id}
+
+            # Assign symbols BEFORE setting waiting_client to None
             new_game.symbols[self.waiting_client] = 'X'
             new_game.symbols[client_socket] = 'O'
-            self.clients[self.waiting_client]['symbol'] = 'X'
-            self.clients[client_socket]['symbol'] = 'O'
+            self.clients[waiting_fd]['symbol'] = 'X'
+            self.clients[client_fd]['symbol'] = 'O'
 
             # Notify both players
-            self.send_join_ack(self.waiting_client, game_id, 'X')
+            self.send_join_ack(self.clients[waiting_fd]['socket'], game_id, 'X')
             self.send_join_ack(client_socket, game_id, 'O')
+
+            # Clear the waiting client
+            self.waiting_client = None
+
+            logging.info(f"Game {game_id} started between {waiting_username} and {username}")
 
             return game_id
         else:
             # Wait for another player
             self.waiting_client = client_socket
-            self.clients[client_socket] = {'username': username}
+            client_fd = client_socket.fileno()
+            self.clients[client_fd] = {'socket': client_socket, 'username': username}
             # Notify the client that they are waiting
             response = {
                 "type": "join_ack",
@@ -144,6 +153,7 @@ class Server:
                 }
             }
             self.send_message(client_socket, response)
+            logging.info(f"{username} is waiting for an opponent.")
             return None  # Indicate waiting
 
     def send_join_ack(self, client_socket, game_id, symbol):
@@ -193,6 +203,10 @@ class Server:
                     }
                 }
                 self.send_message(player, response)
+            # If game is over, remove it from active games
+            if game.winner:
+                logging.info(f"Game {game_id} ended. Winner: {game.winner_username()}")
+                self.games.pop(game_id, None)
         else:
             self.send_error(client_socket, result['code'], result['message'])
 
@@ -209,15 +223,17 @@ class Server:
             return
 
         # Broadcast the chat message to both players
+        sender_username = self.clients[client_socket.fileno()]['username']
         broadcast = {
             "type": "chat_broadcast",
             "data": {
-                "username": self.clients[client_socket]['username'],
+                "username": sender_username,
                 "message": message
             }
         }
         for player in game.players:
             self.send_message(player, broadcast)
+        logging.info(f"Game {game_id}: {sender_username} says: {message}")
 
     def handle_quit(self, client_socket, data):
         game_id = data.get('game_id')
@@ -231,9 +247,9 @@ class Server:
             return
 
         # Remove the player from the game
-        username = self.clients[client_socket]['username']
+        username = self.clients[client_socket.fileno()]['username']
         game.remove_player(client_socket)
-        self.clients.pop(client_socket, None)
+        self.clients.pop(client_socket.fileno(), None)
 
         # Notify the other player
         for player in game.players:
@@ -246,9 +262,12 @@ class Server:
             }
             self.send_message(player, response)
 
+        logging.info(f"Game {game_id}: {username} has quit the game.")
+
         # If no players left, remove the game
         if not game.players:
             self.games.pop(game_id, None)
+            logging.info(f"Game {game_id} has been removed due to no remaining players.")
 
     def handle_client(self, client_socket, address):
         thread_name = threading.current_thread().name
@@ -281,11 +300,30 @@ class Server:
         except socket.error as e:
             logging.error(f"[{thread_name}] Socket error with {address}: {e}")
         except Exception as e:
-            logging.error(f"[{thread_name}] Unexpected error with {address}: {e}")
+            logging.exception(f"[{thread_name}] Unexpected error with {address}: {e}")
         finally:
             # Clean up on client disconnect
-            if client_socket in self.clients:
-                self.clients.pop(client_socket)
+            if client_socket.fileno() in self.clients:
+                client_info = self.clients[client_socket.fileno()]
+                game_id = client_info.get('game_id')
+                if game_id:
+                    game = self.games.get(game_id)
+                    if game:
+                        game.remove_player(client_socket)
+                        # Notify remaining players
+                        for player in game.players:
+                            response = {
+                                "type": "quit_ack",
+                                "data": {
+                                    "status": "success",
+                                    "message": f"{client_info['username']} has left the game."
+                                }
+                            }
+                            self.send_message(player, response)
+                        if not game.players:
+                            self.games.pop(game_id, None)
+                            logging.info(f"Game {game_id} has been removed due to no remaining players.")
+                self.clients.pop(client_socket.fileno(), None)
             client_socket.close()
             logging.info(f"[{thread_name}] Connection closed with {address}")
 
@@ -301,7 +339,7 @@ class Server:
                     logging.error(f"Socket error during accept: {e}")
                     break
                 except Exception as e:
-                    logging.error(f"Unexpected error: {e}")
+                    logging.exception(f"Unexpected error: {e}")
                     break
 
     def stop(self):
