@@ -1,3 +1,4 @@
+
 # Tic-Tac-Toe Multiplayer Game
 
 ## Overview
@@ -39,14 +40,12 @@ Player O, enter your move (row column): 2 2
 ## TCP Client-Server Application
 A simple TCP client-server application in Python that allows multiple clients to connect to a server concurrently, send messages, and receive responses.
 
-### Server:
-
+### Server
 - Handles multiple client connections using threading.
 - Implements a JSON-based communication protocol.
 - Logs connection events and errors.
 
-### Client:
-
+### Client
 - Connects to the server to send messages.
 - Receives and displays responses from the server.
 - Includes error handling for network issues.
@@ -54,48 +53,49 @@ A simple TCP client-server application in Python that allows multiple clients to
 ### Installation
 - Clone the Repository
 ```bash
-[git clone https://github.com/yourusername/tcp-client-server.git](https://github.com/ekowkaay/tic-tac-toe-multiplayer.git)
+git clone https://github.com/ekowkaay/tic-tac-toe-multiplayer.git
 ```
-### Dependencies
 
+### Dependencies
 This project uses only Python's standard library modules and does not require any external packages.
 
 ## Requirements File
-
 The `requirements.txt` file is included to indicate that there are no external dependencies. It is empty because all the necessary modules are part of the Python standard library.
 
 ### Running the Server
 ```bash
 python3 server.py --host <HOST> --port <PORT> --max-workers <MAX_WORKERS>
 ```
-#### Example:
+#### Example
 ```bash
 python3 server.py --host 127.0.0.1 --port 65432 --max-workers 20
 ```
 
 ### Running the Client
-```
+```bash
 python3 client.py --host <HOST> --port <PORT>
 ```
- #### Example:
- ```
+#### Example
+```bash
 python3 client.py --host 127.0.0.1 --port 65432
 ```
 
 ### Sending Messages
 - Type a message and press Enter to send it to the server.
 - The server will respond by echoing the message back with a prefix "Echo: ".
-- Type exit to disconnect from the server.
+- Type `exit` to disconnect from the server.
 
 ### Testing
-```
+```bash
 python3 test_multiple_clients.py
 ```
 
 ## Game Message Protocol Specification
 
 ### Message Format
-```
+All messages between the client and server are in JSON format. Each message consists of a "type" field indicating the message type and a "data" field containing message-specific information.
+
+```json
 {
     "type": "message_type",
     "data": {
@@ -103,246 +103,160 @@ python3 test_multiple_clients.py
     }
 }
 ```
-- type: (string) Indicates the type of the message (e.g., "join", "move", "chat", "quit", "error").
-- data: (object) Contains message-specific data fields relevant to the message type.
+- `type`: (string) Indicates the type of the message (e.g., "join", "move", "chat", "quit", "error").
+- `data`: (object) Contains message-specific data fields relevant to the message type.
 
 ### Message Types
 
-1. Join ("join")
-Purpose
-Sent by a client to request to join a game.
+1. **Join ("join")**
+   - **Purpose**: Client requests to join a game.
+   - **Client to Server Data Fields**:
+     - `username`: (string) The player's username.
+   - **Example**:
+     ```json
+     {
+         "type": "join",
+         "data": {
+             "username": "Player1"
+         }
+     }
+     ```
+   - **Server Response: Join Acknowledgment ("join_ack")**
+     - **Data Fields**:
+       - `status`: (string) "success" if the game starts, "waiting" if waiting for an opponent.
+       - `game_id`: (string) Unique game identifier (when status is "success").
+       - `player_symbol`: (string) "X" or "O" (when status is "success").
+       - `message`: (string) Informational message (when status is "waiting").
+     - **Example (waiting)**:
+       ```json
+       {
+           "type": "join_ack",
+           "data": {
+               "status": "waiting",
+               "message": "Waiting for an opponent..."
+           }
+       }
+       ```
+     - **Example (success)**:
+       ```json
+       {
+           "type": "join_ack",
+           "data": {
+               "status": "success",
+               "game_id": "game12345",
+               "player_symbol": "X"
+           }
+       }
+       ```
 
-Client to Server
-Data Fields:
+2. **Move ("move")**
+   - **Purpose**: Client makes a move on the game board.
+   - **Client to Server Data Fields**:
+     - `game_id`: (string) The game session identifier.
+     - `position`: (list of integers) [row, column] indices of the move (0-based index).
+   - **Example**:
+     ```json
+     {
+         "type": "move",
+         "data": {
+             "game_id": "game12345",
+             "position": [0, 1]
+         }
+     }
+     ```
+   - **Server Response: Move Acknowledgment ("move_ack")**
+     - **Data Fields**:
+       - `status`: (string) "success" or "failure".
+       - `game_state`: (list of lists) The updated game board.
+       - `next_player`: (string) Username of the next player.
+       - `winner`: (string or null) Username of the winner, "draw" if the game is a draw, or null if the game is ongoing.
+     - **Example**:
+       ```json
+       {
+           "type": "move_ack",
+           "data": {
+               "status": "success",
+               "game_state": [
+                   ["X", "", "O"],
+                   ["", "X", ""],
+                   ["", "", ""]
+               ],
+               "next_player": "Player2",
+               "winner": null
+           }
+       }
+       ```
 
-username: (string) The username of the player
-```
-{
-    "type": "join",
-    "data": {
-        "username": "Player1"
-    }
-}
-```
+3. **Chat ("chat")**
+   - **Purpose**: Client sends a chat message to the other player.
+   - **Client to Server Data Fields**:
+     - `game_id`: (string) The game session identifier.
+     - `message`: (string) The chat message content.
+   - **Example**:
+     ```json
+     {
+         "type": "chat",
+         "data": {
+             "game_id": "game12345",
+             "message": "Good luck!"
+         }
+     }
+     ```
+   - **Server Response: Chat Broadcast ("chat_broadcast")**
+     - **Data Fields**:
+       - `username`: (string) Sender's username.
+       - `message`: (string) The chat message content.
+     - **Example**:
+       ```json
+       {
+           "type": "chat_broadcast",
+           "data": {
+               "username": "Player1",
+               "message": "Good luck!"
+           }
+       }
+       ```
 
-Server Responses
-Join Acknowledgment ("join_ack")
+4. **Quit ("quit")**
+   - **Purpose**: Client requests to leave the game.
+   - **Client to Server Data Fields**:
+     - `game_id`: (string) The game session identifier.
+   - **Example**:
+     ```json
+     {
+         "type": "quit",
+         "data": {
+             "game_id": "game12345"
+         }
+     }
+     ```
+   - **Server Response: Quit Acknowledgment ("quit_ack")**
+     - **Data Fields**:
+       - `status`: (string) "success".
+       - `message`: (string) Informational message.
+     - **Example**:
+       ```json
+       {
+           "type": "quit_ack",
+           "data": {
+               "status": "success",
+               "message": "Player1 has left the game."
+           }
+       }
+       ```
 
-Data Fields:
-
-status: (string) Indicates the join status.
-"success": The game is ready to start.
-"waiting": Waiting for an opponent.
-game_id: (string) The unique identifier for the game session (provided when status is "success").
-player_symbol: (string) The symbol assigned to the player ("X" or "O", provided when status is "success").
-message: (string) Optional message, used when waiting.
-Examples:
-
-Waiting for an Opponent:
-```
-{
-    "type": "join_ack",
-    "data": {
-        "status": "waiting",
-        "message": "Waiting for an opponent..."
-    }
-}
-```
-Game Ready to Start
-```
-{
-    "type": "join_ack",
-    "data": {
-        "status": "success",
-        "game_id": "123e4567-e89b-12d3-a456-426614174000",
-        "player_symbol": "X"
-    }
-}
-```
-
-
-
-Thought for 4 seconds
-
-Game Message Protocol Specification
-Message Format
-All messages between the client and server are in JSON format. Each message consists of a "type" field indicating the message type and a "data" field containing message-specific information.
-
-json
-Copy code
-{
-    "type": "message_type",
-    "data": {
-        // message-specific data fields
-    }
-}
-type: (string) Indicates the type of the message (e.g., "join", "move", "chat", "quit", "error").
-data: (object) Contains message-specific data fields relevant to the message type.
-Message Types
-1. Join ("join")
-
-Purpose: Client requests to join a game.
-Client ➔ Server Data Fields:
-"username": (string) The player's username.
-
-Example:
-```
-{
-    "type": "join",
-    "data": {
-        "username": "Player1"
-    }
-}
-```
-
-Server Response: Join Acknowledgment ("join_ack")
-Data Fields:
-"status": (string) "success" if the game starts, "waiting" if waiting for an opponent.
-"game_id": (string) Unique game identifier (when status is "success").
-"player_symbol": (string) "X" or "O" (when status is "success").
-"message": (string) Informational message (when status is "waiting").
-Example(waiting):
-```
-{
-    "type": "join_ack",
-    "data": {
-        "status": "waiting",
-        "message": "Waiting for an opponent..."
-    }
-}
-```
-
-Example (Success):
-
-```
-{
-    "type": "join_ack",
-    "data": {
-        "status": "success",
-        "game_id": "game12345",
-        "player_symbol": "X"
-    }
-}
-
-```
-2. Move ("move")
-Purpose: Client makes a move on the game board.
-Client ➔ Server Data Fields:
-"game_id": (string) The game session identifier.
-"position": (list of integers) [row, column] indices of the move (0-based index).
-Example:
-
-```
-{
-    "type": "move",
-    "data": {
-        "game_id": "game12345",
-        "position": [0, 1]
-    }
-}
-```
-
-Server Response: Move Acknowledgment ("move_ack")
-Data Fields:
-"status": (string) "success" or "failure".
-"game_state": (list of lists) The updated game board.
-"next_player": (string) Username of the next player.
-"winner": (string or null) Username of the winner, "draw" if the game is a draw, or null if the game is ongoing.
-
-Example:
-```
-{
-    "type": "move_ack",
-    "data": {
-        "status": "success",
-        "game_state": [
-            ["X", "", "O"],
-            ["", "X", ""],
-            ["", "", ""]
-        ],
-        "next_player": "Player2",
-        "winner": null
-    }
-}
-```
-
-3. Chat ("chat")
-Purpose: Client sends a chat message to the other player.
-Client ➔ Server Data Fields:
-"game_id": (string) The game session identifier.
-"message": (string) The chat message content.
-Example:
-
-```
-{
-    "type": "chat",
-    "data": {
-        "game_id": "game12345",
-        "message": "Good luck!"
-    }
-}
-```
-
-Server Response: Chat Broadcast ("chat_broadcast")
-Data Fields:
-"username": (string) Sender's username.
-"message": (string) The chat message content.
-Example:
-
-```
-{
-    "type": "chat_broadcast",
-    "data": {
-        "username": "Player1",
-        "message": "Good luck!"
-    }
-}
-```
-
-4. Quit ("quit")
-Purpose: Client requests to leave the game.
-Client ➔ Server Data Fields:
-"game_id": (string) The game session identifier.
-
-Example:
-
-```
-{
-    "type": "quit",
-    "data": {
-        "game_id": "game12345"
-    }
-}
-```
-
-Server Response: Quit Acknowledgment ("quit_ack")
-Data Fields:
-"status": (string) "success".
-"message": (string) Informational message.
-Example:
-```
-{
-    "type": "quit_ack",
-    "data": {
-        "status": "success",
-        "message": "Player1 has left the game."
-    }
-}
-```
-
-5. Error ("error")
-Purpose: Server notifies the client of an error.
-Server ➔ Client Data Fields:
-"code": (string) Error code (e.g., "invalid_move", "not_your_turn", "unknown_type").
-"message": (string) Descriptive error message.
-
-Example:
-```
-{
-    "type": "error",
-    "data": {
-        "code": "invalid_move",
-        "message": "Position already occupied."
-    }
-}
-```
+5. **Error ("error")**
+   - **Purpose**: Server notifies the client of an error.
+   - **Server to Client Data Fields**:
+     - `code`: (string) Error code (e.g., "invalid_move", "not_your_turn", "unknown_type").
+     - `message`: (string) Descriptive error message.
+   - **Example**:
+     ```json
+     {
+         "type": "error",
+         "data": {
+             "code": "invalid_move",
+             "message": "Position already occupied."
+         }
+     }
+     ```
