@@ -262,23 +262,19 @@ All messages between the client and server are in JSON format. Each message cons
      ```
 
 6. **Start the server**
-   ```
-   bash
+   ```bash
    python3 server.py --host 127.0.0.1 --port 65432 --max-workers 10
    ```
 7. **Running Clients Manually:**
-   ```
-   bash
+   ```bash
    python3 client.py --host 127.0.0.1 --port 65432 --username Player1
    ```
 
-   ```
-   bash
+   ```bash
    python3 client.py --host 127.0.0.1 --port 65432 --username Player2
    ```
 8. **Running the Test Script:**
-    ```
-    bash
+    ```bash
     python3 test_tictactoe.py
     ```
     
