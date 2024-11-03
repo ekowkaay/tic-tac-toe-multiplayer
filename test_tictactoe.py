@@ -1,161 +1,191 @@
 import unittest
-import subprocess
-import time
 import threading
-from client import Client
+import time
 import logging
+from client import Client
+from server import Server
+import socket
 
-class TestTicTacToe(unittest.TestCase):
+class TestTicTacToeGame(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        # Start the server process
-        cls.server_process = subprocess.Popen(['python3', 'server.py'])
-        time.sleep(1)  # Give the server time to start
+        # Start the server
+        cls.server = Server(host='127.0.0.1', port=65432, max_workers=10)
+        cls.server_thread = threading.Thread(target=cls.server.start)
+        cls.server_thread.daemon = True
+        cls.server_thread.start()
+        time.sleep(1)  # Give the server a moment to start
 
     @classmethod
     def tearDownClass(cls):
-        # Terminate the server process
-        cls.server_process.terminate()
-        cls.server_process.wait()
+        # Stop the server
+        cls.server.stop()
+        cls.server_thread.join()
 
-    def test_game_play(self):
-        # Set up logging for the test
-        logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-        # Initialize clients
+    def test_client_connection_and_join(self):
+        # Test that clients can connect and join the game
         client1 = Client(host='127.0.0.1', port=65432, username='Player1')
         client2 = Client(host='127.0.0.1', port=65432, username='Player2')
 
-        # Flags to control the flow
-        client1_turn = threading.Event()
-        client2_turn = threading.Event()
-        game_over = threading.Event()
-
-        # Client event handlers
-        def client1_message_handler():
-            while not game_over.is_set():
-                message = client1.receive_message()
-                if message:
-                    self.handle_client_message(client1, message, client1_turn, client2_turn, game_over)
-
-        def client2_message_handler():
-            while not game_over.is_set():
-                message = client2.receive_message()
-                if message:
-                    self.handle_client_message(client2, message, client2_turn, client1_turn, game_over)
-
-        # Start clients and connect
         self.assertTrue(client1.connect())
         self.assertTrue(client2.connect())
 
-        # Start listening threads
-        client1_thread = threading.Thread(target=client1_message_handler)
-        client2_thread = threading.Thread(target=client2_message_handler)
-        client1_thread.start()
-        client2_thread.start()
+        # Wait for both clients to join the game
+        time.sleep(1)
 
-        try:
-            # Wait for the game to start
-            time.sleep(1)
+        self.assertIsNotNone(client1.game_id, "Client1 did not receive game_id")
+        self.assertIsNotNone(client2.game_id, "Client2 did not receive game_id")
+        self.assertEqual(client1.game_id, client2.game_id, "Clients are not in the same game")
 
-            # Player1 starts first
-            client1_turn.set()
+        client1.disconnect()
+        client2.disconnect()
 
-            # Simulate game moves
-            moves = [
-                (client1, [0, 0]),  # Player1
-                (client2, [1, 1]),  # Player2
-                (client1, [0, 1]),  # Player1
-                (client2, [1, 2]),  # Player2
-                (client1, [0, 2])   # Player1 - Winning Move
-            ]
+    def test_valid_moves(self):
+        # Test that clients can make valid moves
+        client1 = Client(host='127.0.0.1', port=65432, username='Player1')
+        client2 = Client(host='127.0.0.1', port=65432, username='Player2')
 
-            for client, position in moves:
-                if client == client1:
-                    client1_turn.wait()
-                    client1.send_move(position)
-                    client1_turn.clear()
-                elif client == client2:
-                    client2_turn.wait()
-                    client2.send_move(position)
-                    client2_turn.clear()
+        client1.connect()
+        client2.connect()
+        time.sleep(1)
 
-                # Wait for the other client's turn to complete
-                time.sleep(0.5)
+        # Simulate gameplay
+        moves = [
+            (client1, [0, 0]),
+            (client2, [1, 1]),
+            (client1, [0, 1]),
+            (client2, [1, 2]),
+            (client1, [0, 2])  # This move leads to a win for client1
+        ]
 
-                # Check if the game is over
-                if game_over.is_set():
-                    break
+        for client, position in moves:
+            client.send_move(position)
+            time.sleep(0.5)
 
-            # Wait for game over
-            game_over.wait()
+        # Wait for server to process moves
+        time.sleep(1)
 
-        finally:
-            # Disconnect clients
-            client1.disconnect()
-            client2.disconnect()
+        # Check if client1 is the winner
+        self.assertTrue(client1.game_over, "Client1 game should be over")
+        self.assertTrue(client2.game_over, "Client2 game should be over")
+        self.assertEqual(client1.winner, client1.username, "Client1 should be the winner")
+        self.assertEqual(client2.winner, client1.username, "Client2 should recognize Client1 as the winner")
 
-            # Ensure threads are terminated
-            client1_thread.join()
-            client2_thread.join()
+        client1.disconnect()
+        client2.disconnect()
 
-    def handle_client_message(self, client, message, own_turn_event, other_turn_event, game_over_event):
-        message_type = message.get('type')
-        data = message.get('data')
+    def test_invalid_moves(self):
+        # Test that invalid moves are handled properly
+        client1 = Client(host='127.0.0.1', port=65432, username='Player1')
+        client2 = Client(host='127.0.0.1', port=65432, username='Player2')
 
-        if message_type == 'join_ack':
-            status = data.get('status')
-            if status == 'success':
-                logging.info(f"{client.username} joined game {data.get('game_id')} as '{data.get('player_symbol')}'")
-            elif status == 'waiting':
-                logging.info(f"{client.username} is waiting for an opponent.")
-        elif message_type == 'move_ack':
-            status = data.get('status')
-            if status == 'success':
-                game_state = data.get('game_state')
-                next_player = data.get('next_player')
-                winner = data.get('winner')
+        client1.connect()
+        client2.connect()
+        time.sleep(1)
 
-                # Update client game state
-                client.game_state = game_state
+        # Client1 makes a valid move
+        client1.send_move([0, 0])
+        time.sleep(0.5)
 
-                # Display game board
-                self.display_game_board(game_state, client.username)
+        # Client1 tries to move again (out of turn)
+        client1.send_move([0, 1])
+        time.sleep(0.5)
 
-                if winner:
-                    if winner == 'draw':
-                        logging.info("The game ended in a draw.")
-                    elif winner == client.username:
-                        logging.info("Congratulations, you won!")
-                    else:
-                        logging.info(f"{winner} has won the game.")
-                    game_over_event.set()
-                else:
-                    # Set the appropriate turn event
-                    if next_player == client.username:
-                        own_turn_event.set()
-                    else:
-                        other_turn_event.set()
-            else:
-                logging.error(f"Move failed: {data.get('message')}")
-                # Allow the client to retry if desired
-                own_turn_event.set()
-        elif message_type == 'error':
-            logging.error(f"Error from server [{data.get('code')}]: {data.get('message')}")
-            # Decide how to handle the error
-            # For this test, we'll set the turn event to allow retry
-            own_turn_event.set()
-        elif message_type == 'chat_broadcast':
-            logging.info(f"{data.get('username')}: {data.get('message')}")
-        elif message_type == 'quit_ack':
-            logging.info(data.get('message'))
-            game_over_event.set()
+        # Verify that an error was received
+        self.assertTrue(client1.last_error is not None, "Client1 should receive an error for moving out of turn")
+        self.assertEqual(client1.last_error_code, 'not_your_turn', "Error code should be 'not_your_turn'")
 
-    def display_game_board(self, board, username):
-        logging.info(f"{username}'s View of the Game Board:")
-        for row in board:
-            logging.info(' | '.join(cell or ' ' for cell in row))
-            logging.info('---------')
+        # Client2 makes a valid move
+        client2.send_move([0, 0])  # Occupied cell
+        time.sleep(0.5)
+
+        # Verify that an error was received
+        self.assertTrue(client2.last_error is not None, "Client2 should receive an error for moving on occupied cell")
+        self.assertEqual(client2.last_error_code, 'invalid_move', "Error code should be 'invalid_move'")
+
+        # Client2 makes a valid move
+        client2.send_move([1, 1])
+        time.sleep(0.5)
+
+        client1.disconnect()
+        client2.disconnect()
+
+    def test_game_draw(self):
+        # Test a game that results in a draw
+        client1 = Client(host='127.0.0.1', port=65432, username='Player1')
+        client2 = Client(host='127.0.0.1', port=65432, username='Player2')
+
+        client1.connect()
+        client2.connect()
+        time.sleep(1)
+
+        # Simulate gameplay leading to a draw
+        moves = [
+            (client1, [0, 0]),
+            (client2, [0, 1]),
+            (client1, [0, 2]),
+            (client2, [1, 0]),
+            (client1, [1, 2]),
+            (client2, [1, 1]),
+            (client1, [2, 1]),
+            (client2, [2, 0]),
+            (client1, [2, 2])
+        ]
+
+        for client, position in moves:
+            client.send_move(position)
+            time.sleep(0.5)
+
+        # Wait for server to process moves
+        time.sleep(1)
+
+        # Check for draw
+        self.assertTrue(client1.game_over, "Client1 game should be over")
+        self.assertTrue(client2.game_over, "Client2 game should be over")
+        self.assertEqual(client1.winner, 'draw', "Game should result in a draw")
+        self.assertEqual(client2.winner, 'draw', "Game should result in a draw")
+
+        client1.disconnect()
+        client2.disconnect()
+
+    def test_chat_messages(self):
+        # Test chat functionality
+        client1 = Client(host='127.0.0.1', port=65432, username='Player1')
+        client2 = Client(host='127.0.0.1', port=65432, username='Player2')
+
+        client1.connect()
+        client2.connect()
+        time.sleep(1)
+
+        # Client1 sends a chat message
+        client1.send_chat("Hello Player2!")
+        time.sleep(0.5)
+
+        # Verify that Client2 received the chat message
+        self.assertIn("Hello Player2!", client2.chat_messages, "Client2 should receive chat message from Client1")
+
+        client1.disconnect()
+        client2.disconnect()
+
+    def test_client_disconnection(self):
+        # Test handling of client disconnection
+        client1 = Client(host='127.0.0.1', port=65432, username='Player1')
+        client2 = Client(host='127.0.0.1', port=65432, username='Player2')
+
+        client1.connect()
+        client2.connect()
+        time.sleep(1)
+
+        # Client1 disconnects
+        client1.send_quit()
+        time.sleep(1)
+
+        # Verify that Client2 is notified
+        self.assertTrue(client2.game_over, "Client2 should be notified of opponent's disconnection")
+
+        client2.disconnect()
 
 if __name__ == '__main__':
+    # Set logging level to ERROR to reduce test output clutter
+    logging.basicConfig(level=logging.ERROR)
     unittest.main()

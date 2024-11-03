@@ -8,14 +8,17 @@ import logging
 import sys
 import time
 import queue
+import uuid
 
 class Client:
-    def __init__(self, host='127.0.0.1', port=65432, username='Player'):
+    def __init__(self, host='127.0.0.1', port=65432, username=None, avatar=None):
         self.server_address = (host, port)
-        self.username = username
+        self.username = username if username is not None else input("Enter your username: ") or f"Player_{uuid.uuid4().hex[:6]}"
+        self.avatar = avatar if avatar is not None else input("Enter your avatar (optional): ")
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.connected = False
         self.game_id = None
+        self.player_uuid = None
         self.player_symbol = None
         self.game_state = [['' for _ in range(3)] for _ in range(3)]
         self.my_turn = False
@@ -56,7 +59,8 @@ class Client:
         message = {
             "type": "join",
             "data": {
-                "username": self.username
+                "username": self.username,
+                "avatar": self.avatar
             }
         }
         self.send_message(message)
@@ -66,7 +70,8 @@ class Client:
             "type": "move",
             "data": {
                 "game_id": self.game_id,
-                "position": position
+                "position": position,
+                "uuid": self.player_uuid
             }
         }
         self.send_message(message)
@@ -76,7 +81,8 @@ class Client:
             "type": "chat",
             "data": {
                 "game_id": self.game_id,
-                "message": message_text
+                "message": message_text,
+                "uuid": self.player_uuid
             }
         }
         self.send_message(message)
@@ -85,7 +91,8 @@ class Client:
         message = {
             "type": "quit",
             "data": {
-                "game_id": self.game_id
+                "game_id": self.game_id,
+                "uuid": self.player_uuid
             }
         }
         self.send_message(message)
@@ -124,11 +131,29 @@ class Client:
             logging.error("No message received within the timeout period.")
             return None
 
+    def handle_join_ack(self, data):
+        status = data.get('status')
+        if status == 'success':
+            self.game_id = data.get('game_id')
+            self.player_symbol = data.get('player_symbol')
+            self.player_uuid = data.get('uuid')
+            print(f"Game started! You are '{self.player_symbol}'.")
+            if self.player_symbol == 'X':
+                self.my_turn = True
+            else:
+                self.my_turn = False
+        elif status == 'waiting':
+            self.player_uuid = data.get('uuid')
+            print(data.get('message'))
+        else:
+            print("Failed to join game.")
+
     def handle_move_ack(self, data):
         status = data.get('status')
         if status == 'success':
             self.game_state = data.get('game_state')
-            next_player = data.get('next_player')
+            next_player_uuid = data.get('next_player_uuid')
+            next_player_username = data.get('next_player_username')
             winner = data.get('winner')
             self.display_game_board()
             if winner:
@@ -140,12 +165,17 @@ class Client:
                     print(f"{winner} has won the game.")
                 self.game_over = True
             else:
-                print(f"It's {next_player}'s turn.")
-                self.my_turn = (next_player == self.username)
+                print(f"It's {next_player_username}'s turn.")
+                self.my_turn = (next_player_uuid == self.player_uuid)
         else:
             print(f"Move failed: {data.get('message')}")
             # Allow the player to retry
             self.my_turn = True
+
+    def handle_chat_broadcast(self, data):
+        username = data.get('username')
+        message = data.get('message')
+        print(f"{username}: {message}")
 
     def handle_quit_ack(self, data):
         print(data.get('message'))
@@ -155,26 +185,6 @@ class Client:
         error_code = data.get('code')
         message = data.get('message')
         print(f"Error from server [{error_code}]: {message}")
-
-    def handle_join_ack(self, data):
-        status = data.get('status')
-        if status == 'success':
-            self.game_id = data.get('game_id')
-            self.player_symbol = data.get('player_symbol')
-            print(f"Game started! You are '{self.player_symbol}'.")
-            if self.player_symbol == 'X':
-                self.my_turn = True
-            else:
-                self.my_turn = False
-        elif status == 'waiting':
-            print(data.get('message'))
-        else:
-            print("Failed to join game.")
-
-    def handle_chat_broadcast(self, data):
-        username = data.get('username')
-        message = data.get('message')
-        print(f"{username}: {message}")
 
     def display_game_board(self):
         print("\nCurrent Game Board:")
@@ -206,18 +216,41 @@ class Client:
             else:
                 time.sleep(0.1)  # Small delay to prevent busy waiting
 
+    def handle_server_message(self):
+        while not self.game_over:
+            message = self.receive_message()
+            if message:
+                message_type = message.get('type')
+                data = message.get('data')
+                if message_type == 'join_ack':
+                    self.handle_join_ack(data)
+                elif message_type == 'move_ack':
+                    self.handle_move_ack(data)
+                elif message_type == 'chat_broadcast':
+                    self.handle_chat_broadcast(data)
+                elif message_type == 'quit_ack':
+                    self.handle_quit_ack(data)
+                elif message_type == 'error':
+                    self.handle_error(data)
+                else:
+                    logging.warning(f"Unknown message type: {message_type}")
+            else:
+                break  # No message received, possibly due to disconnection
+
 def main():
     parser = argparse.ArgumentParser(description="Tic-Tac-Toe Client")
     parser.add_argument('--host', default='127.0.0.1', help='Server host')
     parser.add_argument('--port', type=int, default=65432, help='Server port')
-    parser.add_argument('--username', default='Player', help='Your username')
+    parser.add_argument('--username', help='Your username')
+    parser.add_argument('--avatar', help='Your avatar (optional)')
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-    client = Client(host=args.host, port=args.port, username=args.username)
+    client = Client(host=args.host, port=args.port, username=args.username, avatar=args.avatar)
     if client.connect():
         try:
+            threading.Thread(target=client.handle_server_message, daemon=True).start()
             client.play_game()
         except KeyboardInterrupt:
             client.send_quit()
