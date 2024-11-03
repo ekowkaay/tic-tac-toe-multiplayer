@@ -1,3 +1,5 @@
+# server.py
+
 import socket
 import threading
 import logging
@@ -92,7 +94,7 @@ class Server:
 
     def send_message(self, client_socket, message):
         try:
-            client_socket.sendall(json.dumps(message).encode('utf-8'))
+            client_socket.sendall((json.dumps(message) + '\n').encode('utf-8'))
             logging.debug(f"Sent to {client_socket.getpeername()}: {message}")
         except socket.error as e:
             logging.error(f"Error sending message to {client_socket.getpeername()}: {e}")
@@ -275,26 +277,33 @@ class Server:
         client_socket.settimeout(300)  # Set client socket timeout to 5 minutes
         try:
             while True:
-                message = client_socket.recv(1024).decode('utf-8')
-                if not message:
+                data = ''
+                while '\n' not in data:
+                    chunk = client_socket.recv(1024).decode('utf-8')
+                    if not chunk:
+                        break
+                    data += chunk
+                if not data:
                     break
-                try:
-                    data = json.loads(message)
-                    message_type = data.get('type')
-                    message_data = data.get('data')
+                messages = data.strip().split('\n')
+                for message in messages:
+                    try:
+                        message_data = json.loads(message)
+                        message_type = message_data.get('type')
+                        message_content = message_data.get('data')
 
-                    if message_type == 'join':
-                        self.handle_join(client_socket, message_data)
-                    elif message_type == 'move':
-                        self.handle_move(client_socket, message_data)
-                    elif message_type == 'chat':
-                        self.handle_chat(client_socket, message_data)
-                    elif message_type == 'quit':
-                        self.handle_quit(client_socket, message_data)
-                    else:
-                        self.send_error(client_socket, "unknown_type", "Unknown message type.")
-                except json.JSONDecodeError:
-                    self.send_error(client_socket, "invalid_json", "Invalid JSON format.")
+                        if message_type == 'join':
+                            self.handle_join(client_socket, message_content)
+                        elif message_type == 'move':
+                            self.handle_move(client_socket, message_content)
+                        elif message_type == 'chat':
+                            self.handle_chat(client_socket, message_content)
+                        elif message_type == 'quit':
+                            self.handle_quit(client_socket, message_content)
+                        else:
+                            self.send_error(client_socket, "unknown_type", "Unknown message type.")
+                    except json.JSONDecodeError:
+                        self.send_error(client_socket, "invalid_json", "Invalid JSON format.")
         except socket.timeout:
             logging.error(f"[{thread_name}] Socket timed out with {address}")
         except socket.error as e:
