@@ -277,12 +277,6 @@ All messages between the client and server are in JSON format. Each message cons
     ```bash
     python3 test_tictactoe.py
     ```
-    
-   
-  # Tic-Tac-Toe Multiplayer Game
-
-## Overview
-The goal of this project is to create a network-based multiplayer Tic-Tac-Toe game. The system has a client-server architecture in which player turns are managed by a central server that also broadcasts the game data to clients. The game is played in turns by two players who connect to the server as clients. Getting three marks (X or O) in a row, column, or diagonal is the aim of the game.
 
 ## New Functionality
 
