@@ -279,4 +279,39 @@ All messages between the client and server are in JSON format. Each message cons
     ```
     
    
-  
+  # Tic-Tac-Toe Multiplayer Game
+
+## Overview
+The goal of this project is to create a network-based multiplayer Tic-Tac-Toe game. The system has a client-server architecture in which player turns are managed by a central server that also broadcasts the game data to clients. The game is played in turns by two players who connect to the server as clients. Getting three marks (X or O) in a row, column, or diagonal is the aim of the game.
+
+## New Functionality
+
+### Turn-Based Gameplay
+- **Turn Management**: The server ensures that only the current player can make a move. If a player attempts to move out of turn, the server responds with an appropriate error message indicating that it is not their turn.
+- **Simultaneous Moves Handling**: In cases where both players attempt to make a move simultaneously, the server processes moves in the order they are received, accepting the move from the player whose turn it is.
+- **Game State Synchronization**: After each move, the server broadcasts the updated game state and the next player's turn to all connected clients. Clients update their local state to reflect the current game board.
+
+### Player Identification
+- **Unique Identifiers**: Each player is assigned a unique identifier (UUID) upon connecting to the server, allowing the server to track players accurately throughout the game.
+- **Usernames and Avatars**: Players can choose a username when connecting. If a username is not provided, the server assigns a default one. Players can also specify an avatar, adding a personal touch to their gameplay experience.
+
+## How It Works
+- The **server** handles player connections, game rules, and turn management.
+- The **clients** connect to the server, make moves, and display the game board.
+
+How to Play
+Players take turns entering their move by specifying the row and column (e.g., 1,1 for the top-left corner).
+The game ends when one player gets three in a row, column, or diagonal, or if all spaces are filled (draw).
+```
+Player X, enter your move (row,column): 1,1
+Player O, enter your move (row,column): 2,2
+```
+
+Testing
+To run the test scripts verifying the functionality:
+
+```
+python3 test_turn_based_gameplay.py
+
+```
+
