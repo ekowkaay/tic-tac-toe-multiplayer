@@ -285,6 +285,16 @@ All messages between the client and server are in JSON format. Each message cons
 - **Simultaneous Moves Handling**: In cases where both players attempt to make a move simultaneously, the server processes moves in the order they are received, accepting the move from the player whose turn it is.
 - **Game State Synchronization**: After each move, the server broadcasts the updated game state and the next player's turn to all connected clients. Clients update their local state to reflect the current game board.
 
+### Game State Synchronization
+- **Centralized Game State**: The server maintains the master game state and synchronizes it across all clients. Each time a player makes a valid move, the server updates the game state and broadcasts it to all connected clients, ensuring consistency.
+- **Disconnection Handling**: The server tracks player connections. If a player disconnects mid-game, the server can notify the remaining player and close the game gracefully.
+- **Consistent Gameplay**: All players have a synchronized view of the game board, ensuring no discrepancies between client states.
+
+### Client-Side Game Rendering
+- **Real-Time Game Updates**: Clients dynamically render the game board based on updates received from the server. Each time the server broadcasts a new game state, the client redraws the board to reflect the latest moves.
+- **Player Feedback**: The client provides clear messages to the player, such as indicating whose turn it is, notifying of any errors (e.g., "It is not your turn"), and displaying the game result (e.g., win, lose, or draw).
+- **Game Progress Visualization**: The client displays the game board after each move, ensuring that players have a clear and consistent view of the current game state.
+
 ### Player Identification
 - **Unique Identifiers**: Each player is assigned a unique identifier (UUID) upon connecting to the server, allowing the server to track players accurately throughout the game.
 - **Usernames and Avatars**: Players can choose a username when connecting. If a username is not provided, the server assigns a default one. Players can also specify an avatar, adding a personal touch to their gameplay experience.
@@ -292,6 +302,7 @@ All messages between the client and server are in JSON format. Each message cons
 ## How It Works
 - The **server** handles player connections, game rules, and turn management.
 - The **clients** connect to the server, make moves, and display the game board.
+
 
 How to Play
 Players take turns entering their move by specifying the row and column (e.g., 1,1 for the top-left corner).
