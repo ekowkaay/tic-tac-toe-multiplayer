@@ -312,6 +312,5 @@ To run the test scripts verifying the functionality:
 
 ```
 python3 test_turn_based_gameplay.py
-
 ```
 
