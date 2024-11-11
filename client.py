@@ -9,6 +9,9 @@ import sys
 import time
 import queue
 import uuid
+import tkinter as tk
+from tkinter import messagebox
+
 
 class Client:
     def __init__(self, host='127.0.0.1', port=65432, username=None, avatar=None):
@@ -25,6 +28,81 @@ class Client:
         self.game_over = False
         self.message_queue = queue.Queue()  # Queue to store incoming messages
 
+        # Initialize Tkinter GUI
+        self.root = tk.Tk()
+        self.root.title(f"Tic-Tac-Toe - {self.username}")
+        self.create_gui()
+
+    def create_gui(self):
+        # Create frames
+        self.info_frame = tk.Frame(self.root)
+        self.info_frame.pack(pady=10)
+
+        self.status_label = tk.Label(self.info_frame, text="Connecting to server...", font=("Arial", 14))
+        self.status_label.pack()
+
+        self.board_frame = tk.Frame(self.root)
+        self.board_frame.pack()
+
+        # Create buttons for the board
+        self.buttons = [[None for _ in range(3)] for _ in range(3)]
+        for row in range(3):
+            for col in range(3):
+                btn = tk.Button(self.board_frame, text='', font=("Arial", 24), width=5, height=2,
+                                command=lambda r=row, c=col: self.on_cell_click(r, c))
+                btn.grid(row=row, column=col)
+                self.buttons[row][col] = btn
+
+        self.action_frame = tk.Frame(self.root)
+        self.action_frame.pack(pady=10)
+
+        self.chat_button = tk.Button(self.action_frame, text="Chat", command=self.open_chat_window, state='disabled')
+        self.chat_button.pack(side='left', padx=5)
+
+        self.quit_button = tk.Button(self.action_frame, text="Quit", command=self.quit_game, state='disabled')
+        self.quit_button.pack(side='left', padx=5)
+
+    def on_cell_click(self, row, col):
+        if self.game_over or not self.my_turn:
+            return
+        if self.game_state[row][col]:
+            messagebox.showwarning("Invalid Move", "Position already occupied.")
+            return
+        self.send_move([row, col])
+        self.my_turn = False  # Prevent multiple rapid clicks
+
+    def open_chat_window(self):
+        if not hasattr(self, 'chat_window') or not self.chat_window.winfo_exists():
+            self.chat_window = tk.Toplevel(self.root)
+            self.chat_window.title("Chat")
+            self.chat_text = tk.Text(self.chat_window, state='disabled', width=40, height=15)
+            self.chat_text.pack(pady=5)
+
+            self.chat_entry = tk.Entry(self.chat_window, width=30)
+            self.chat_entry.pack(side='left', padx=5, pady=5)
+            self.chat_entry.bind("<Return>", lambda event: self.send_chat())
+
+            self.send_chat_button = tk.Button(self.chat_window, text="Send", command=self.send_chat)
+            self.send_chat_button.pack(side='left', padx=5, pady=5)
+
+    def send_chat(self):
+        message_text = self.chat_entry.get().strip()
+        if message_text:
+            self.send_message({
+                "type": "chat",
+                "data": {
+                    "game_id": self.game_id,
+                    "message": message_text,
+                    "uuid": self.player_uuid
+                }
+            })
+            self.chat_entry.delete(0, tk.END)
+
+    def quit_game(self):
+        if self.game_id and self.player_uuid:
+            self.send_quit()
+        self.root.destroy()
+
     def connect(self):
         try:
             self.socket.connect(self.server_address)
@@ -37,6 +115,7 @@ class Client:
             return True
         except socket.error as e:
             logging.error(f"Connection error: {e}")
+            messagebox.showerror("Connection Error", f"Failed to connect to server: {e}")
             return False
 
     def disconnect(self):
@@ -51,6 +130,7 @@ class Client:
     def send_message(self, message):
         try:
             self.socket.sendall((json.dumps(message) + '\n').encode('utf-8'))
+            logging.debug(f"Sent: {message}")
         except socket.error as e:
             logging.error(f"Send error: {e}")
             self.connected = False
@@ -76,17 +156,6 @@ class Client:
         }
         self.send_message(message)
 
-    def send_chat(self, message_text):
-        message = {
-            "type": "chat",
-            "data": {
-                "game_id": self.game_id,
-                "message": message_text,
-                "uuid": self.player_uuid
-            }
-        }
-        self.send_message(message)
-
     def send_quit(self):
         message = {
             "type": "quit",
@@ -98,6 +167,7 @@ class Client:
         self.send_message(message)
 
     def receive_messages(self):
+        self.socket.settimeout(None)  # Disable socket timeout
         buffer = ''
         while self.connected and not self.game_over:
             try:
@@ -115,11 +185,15 @@ class Client:
                 else:
                     # Server closed connection
                     self.connected = False
+                    messagebox.showerror("Disconnected", "Server closed the connection.")
+                    break
             except socket.error as e:
                 logging.error(f"Socket error: {e}")
                 self.connected = False
+                messagebox.showerror("Connection Error", f"Socket error: {e}")
+                break
 
-    def receive_message(self, timeout=5):
+    def receive_message(self, timeout=None):
         """
         Retrieve the next message from the queue.
         :param timeout: Time in seconds to wait for a message.
@@ -128,96 +202,166 @@ class Client:
         try:
             return self.message_queue.get(timeout=timeout)
         except queue.Empty:
-            logging.error("No message received within the timeout period.")
             return None
 
     def handle_join_ack(self, data):
+        logging.debug(f"Received join_ack: {data}")
         status = data.get('status')
         if status == 'success':
             self.game_id = data.get('game_id')
             self.player_symbol = data.get('player_symbol')
             self.player_uuid = data.get('uuid')
-            print(f"Game started! You are '{self.player_symbol}'.")
+            self.update_status(f"Game started! You are '{self.player_symbol}'.")
             if self.player_symbol == 'X':
                 self.my_turn = True
+                self.update_status(f"Your turn.")
             else:
                 self.my_turn = False
+                self.update_status(f"Waiting for opponent's move.")
+            self.chat_button.config(state='normal')
+            self.quit_button.config(state='normal')
+            logging.info(f"Joined game {self.game_id} as '{self.player_symbol}' with UUID {self.player_uuid}.")
         elif status == 'waiting':
             self.player_uuid = data.get('uuid')
-            print(data.get('message'))
+            self.update_status("Waiting for an opponent...")
+            logging.info(f"Client {self.username} is waiting for an opponent.")
         else:
-            print("Failed to join game.")
+            self.update_status("Failed to join game.")
+            logging.warning(f"Failed to join game: {data}")
 
     def handle_move_ack(self, data):
+        logging.debug(f"Received move_ack: {data}")
         status = data.get('status')
         if status == 'success':
             self.game_state = data.get('game_state')
             next_player_uuid = data.get('next_player_uuid')
-            next_player_username = data.get('next_player_username')
             winner = data.get('winner')
-            self.display_game_board()
+            self.render_game_board()
             if winner:
                 if winner == 'draw':
-                    print("The game ended in a draw.")
+                    self.update_status("The game ended in a draw.")
                 elif winner == self.username:
-                    print("Congratulations, you won!")
+                    self.update_status("Congratulations, you won!")
                 else:
-                    print(f"{winner} has won the game.")
+                    self.update_status(f"{winner} has won the game.")
                 self.game_over = True
+                self.prompt_new_game(winner)
             else:
-                print(f"It's {next_player_username}'s turn.")
-                self.my_turn = (next_player_uuid == self.player_uuid)
+                if next_player_uuid == self.player_uuid:
+                    self.my_turn = True
+                    self.update_status("Your turn.")
+                else:
+                    self.my_turn = False
+                    self.update_status("Waiting for opponent's move.")
         else:
-            print(f"Move failed: {data.get('message')}")
-            # Allow the player to retry
-            self.my_turn = True
+            error_message = data.get('message', 'Move failed.')
+            messagebox.showerror("Move Error", error_message)
+            error_code = data.get('code')
+            if error_code in ['invalid_move', 'invalid_position']:
+                self.my_turn = True  # Allow the player to try again
 
     def handle_chat_broadcast(self, data):
+        logging.debug(f"Received chat_broadcast: {data}")
         username = data.get('username')
         message = data.get('message')
-        print(f"{username}: {message}")
+        if hasattr(self, 'chat_window') and self.chat_window.winfo_exists():
+            self.chat_text.config(state='normal')
+            self.chat_text.insert(tk.END, f"{username}: {message}\n")
+            self.chat_text.config(state='disabled')
+            self.chat_text.see(tk.END)
 
     def handle_quit_ack(self, data):
-        print(data.get('message'))
+        logging.debug(f"Received quit_ack: {data}")
+        message = data.get('message')
+        messagebox.showinfo("Game Info", message)
         self.game_over = True
+        self.prompt_new_game(None, message)
+
+    def handle_game_over(self, data):
+        logging.debug(f"Received game_over: {data}")
+        winner = data.get('winner')
+        game_id = data.get('game_id')
+        if winner == 'draw':
+            self.update_status("The game ended in a draw.")
+        elif winner == self.username:
+            self.update_status("Congratulations, you won!")
+        else:
+            self.update_status(f"{winner} has won the game.")
+        self.game_over = True
+        self.prompt_new_game(winner)
+
+    def handle_new_game(self, data):
+        logging.debug(f"Received new_game: {data}")
+        status = data.get('status')
+        game_state = data.get('game_state')
+        next_player_uuid = data.get('next_player_uuid')
+        self.game_state = game_state
+        self.game_over = False
+        self.render_game_board()
+        if next_player_uuid == self.player_uuid:
+            self.my_turn = True
+            self.update_status("Your turn.")
+        else:
+            self.my_turn = False
+            self.update_status("Waiting for opponent's move.")
 
     def handle_error(self, data):
+        logging.debug(f"Received error: {data}")
         error_code = data.get('code')
         message = data.get('message')
-        print(f"Error from server [{error_code}]: {message}")
+        messagebox.showerror("Server Error", f"[{error_code}] {message}")
+        if error_code in ['invalid_move', 'invalid_position']:
+            self.my_turn = True  # Allow the player to try again
 
-    def display_game_board(self):
-        print("\nCurrent Game Board:")
-        for row in self.game_state:
-            print(' | '.join(cell or ' ' for cell in row))
-            print('---------')
-        print()
+    def handle_opponent_disconnected(self, data):
+        logging.debug(f"Received opponent_disconnected: {data}")
+        message = data.get('message')
+        self.update_status(message)
+        messagebox.showinfo("Opponent Disconnected", message)
+        self.game_over = True
+        # Optionally, prompt to start a new game or exit
+        self.prompt_new_game(None, message)
 
-    def play_game(self):
-        while not self.game_over:
-            if self.my_turn:
-                command = input("Enter your move (row,col), 'chat', or 'quit': ")
-                if command.lower() == 'quit':
-                    self.send_quit()
-                    self.game_over = True
-                elif command.lower() == 'chat':
-                    message_text = input("Enter your message: ")
-                    self.send_chat(message_text)
-                else:
-                    try:
-                        position = [int(x.strip()) for x in command.split(',')]
-                        if len(position) != 2 or not all(0 <= x <= 2 for x in position):
-                            raise ValueError
-                        self.send_move(position)
-                    except ValueError:
-                        print("Invalid input. Please enter row and column as numbers between 0 and 2, separated by a comma.")
-                    # Wait for server response before allowing another move
-                    self.my_turn = False
-            else:
-                time.sleep(0.1)  # Small delay to prevent busy waiting
+    def prompt_new_game(self, winner=None, message=None):
+        if winner == 'draw' or winner:
+            prompt_message = f"{winner} has won the game!" if winner != 'draw' else "The game ended in a draw."
+        elif message:
+            prompt_message = message
+        else:
+            prompt_message = "The game has ended."
+
+        result = messagebox.askquestion("Game Over", f"{prompt_message}\nDo you want to start a new game?")
+        if result == 'yes':
+            self.send_new_game_request()
+        else:
+            self.quit_game()
+
+    def send_new_game_request(self):
+        message = {
+            "type": "new_game_response",
+            "data": {
+                "game_id": self.game_id,
+                "uuid": self.player_uuid,
+                "response": "start"
+            }
+        }
+        self.send_message(message)
+        self.update_status("Waiting for opponent's response to start a new game...")
+
+    def send_new_game_quit(self):
+        message = {
+            "type": "new_game_response",
+            "data": {
+                "game_id": self.game_id,
+                "uuid": self.player_uuid,
+                "response": "quit"
+            }
+        }
+        self.send_message(message)
+        self.quit_game()
 
     def handle_server_message(self):
-        while not self.game_over:
+        while self.connected:
             message = self.receive_message()
             if message:
                 message_type = message.get('type')
@@ -230,12 +374,56 @@ class Client:
                     self.handle_chat_broadcast(data)
                 elif message_type == 'quit_ack':
                     self.handle_quit_ack(data)
+                elif message_type == 'game_over':
+                    self.handle_game_over(data)
+                elif message_type == 'new_game':
+                    self.handle_new_game(data)
+                elif message_type == 'opponent_disconnected':
+                    self.handle_opponent_disconnected(data)
                 elif message_type == 'error':
                     self.handle_error(data)
                 else:
                     logging.warning(f"Unknown message type: {message_type}")
             else:
-                break  # No message received, possibly due to disconnection
+                continue  # Continue waiting for messages
+
+    def update_status(self, message):
+        self.status_label.config(text=message)
+
+    def render_game_board(self):
+        for row in range(3):
+            for col in range(3):
+                cell_value = self.game_state[row][col]
+                btn = self.buttons[row][col]
+                btn.config(text=cell_value)
+                if cell_value or self.game_over:
+                    btn.config(state='disabled')
+                else:
+                    btn.config(state='normal')
+
+    def start_gui(self):
+        self.root.protocol("WM_DELETE_WINDOW", self.quit_game)
+        self.root.mainloop()
+
+    def run(self):
+        try:
+            if self.connect():
+                threading.Thread(target=self.handle_server_message, daemon=True).start()
+                self.start_gui()
+        except Exception as e:
+            logging.exception(f"An unexpected error occurred: {e}")
+            messagebox.showerror("Error", f"An unexpected error occurred: {e}")
+        finally:
+            self.disconnect()
+
+    def quit_game(self):
+
+        if self.game_id and self.player_uuid:
+            self.send_quit()
+        self.connected = False  # Ensure that the message-handling loop exits
+        self.disconnect()
+        self.root.destroy()
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Tic-Tac-Toe Client")
@@ -245,16 +433,15 @@ if __name__ == '__main__':
     parser.add_argument('--avatar', help='Your avatar (optional)')
     args = parser.parse_args()
 
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    # Configure logging to write to a file and console
+    logging.basicConfig(
+        level=logging.DEBUG,  # Set to DEBUG for more detailed logs
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler("client.log"),
+            logging.StreamHandler()
+        ]
+    )
 
     client = Client(host=args.host, port=args.port, username=args.username, avatar=args.avatar)
-    if client.connect():
-        try:
-            threading.Thread(target=client.handle_server_message, daemon=True).start()
-            client.play_game()
-        except KeyboardInterrupt:
-            client.send_quit()
-        finally:
-            client.disconnect()
-    else:
-        print("Failed to connect to the server.")
+    client.run()

@@ -1,0 +1,180 @@
+2024-11-11 12:08:03,131 - INFO - Connected to server at ('127.0.0.1', 65432)
+2024-11-11 12:08:16,978 - INFO - Connected to server at ('127.0.0.1', 65432)
+2024-11-11 12:11:12,506 - INFO - Disconnected from server
+2024-11-11 12:11:12,506 - ERROR - Socket error: [WinError 10053] An established connection was aborted by the software in your host machine
+2024-11-11 12:11:14,733 - INFO - Disconnected from server
+2024-11-11 12:11:14,733 - ERROR - Socket error: [WinError 10053] An established connection was aborted by the software in your host machine
+2024-11-11 12:12:32,081 - INFO - Connected to server at ('127.0.0.1', 65432)
+2024-11-11 12:12:46,536 - INFO - Connected to server at ('127.0.0.1', 65432)
+2024-11-11 12:44:14,705 - INFO - Connected to server at ('127.0.0.1', 65432)
+2024-11-11 12:44:14,721 - DEBUG - Sent: {'type': 'join', 'data': {'username': 'Bob', 'avatar': ''}}
+2024-11-11 12:44:14,721 - DEBUG - Raw data received: {"type": "join_ack", "data": {"status": "waiting", "message": "Waiting for an opponent...", "uuid": "cf240b96-f065-41bc-92ff-a7a2aed23987"}}
+
+2024-11-11 12:44:14,721 - DEBUG - Processing message: {"type": "join_ack", "data": {"status": "waiting", "message": "Waiting for an opponent...", "uuid": "cf240b96-f065-41bc-92ff-a7a2aed23987"}}
+2024-11-11 12:44:14,721 - DEBUG - Handling message of type: join_ack
+2024-11-11 12:44:28,587 - INFO - Connected to server at ('127.0.0.1', 65432)
+2024-11-11 12:44:28,587 - DEBUG - Sent: {'type': 'join', 'data': {'username': 'Alice', 'avatar': ''}}
+2024-11-11 12:44:28,587 - DEBUG - Raw data received: {"type": "join_ack", "data": {"status": "success", "game_id": "11d8f2fd-c8d2-427c-a8cf-94627fcd3044", "player_symbol": "X", "uuid": "cf240b96-f065-41bc-92ff-a7a2aed23987"}}
+
+2024-11-11 12:44:28,587 - DEBUG - Processing message: {"type": "join_ack", "data": {"status": "success", "game_id": "11d8f2fd-c8d2-427c-a8cf-94627fcd3044", "player_symbol": "X", "uuid": "cf240b96-f065-41bc-92ff-a7a2aed23987"}}
+2024-11-11 12:44:28,587 - DEBUG - Raw data received: {"type": "join_ack", "data": {"status": "success", "game_id": "11d8f2fd-c8d2-427c-a8cf-94627fcd3044", "player_symbol": "O", "uuid": "a5d856bb-8ed5-4b89-a0eb-16e88fc388eb"}}
+
+2024-11-11 12:44:28,587 - DEBUG - Processing message: {"type": "join_ack", "data": {"status": "success", "game_id": "11d8f2fd-c8d2-427c-a8cf-94627fcd3044", "player_symbol": "O", "uuid": "a5d856bb-8ed5-4b89-a0eb-16e88fc388eb"}}
+2024-11-11 12:44:28,587 - DEBUG - Handling message of type: join_ack
+2024-11-11 12:54:14,727 - DEBUG - Raw data received: {"type": "opponent_disconnected", "data": {"message": "Bob has disconnected.", "game_over": true}}
+
+2024-11-11 12:54:14,727 - DEBUG - Processing message: {"type": "opponent_disconnected", "data": {"message": "Bob has disconnected.", "game_over": true}}
+2024-11-11 13:33:34,467 - INFO - Connected to server at ('127.0.0.1', 65432)
+2024-11-11 13:33:34,467 - DEBUG - Sent: {'type': 'join', 'data': {'username': 'Alice', 'avatar': ''}}
+2024-11-11 13:33:34,467 - DEBUG - Received join_ack: {'status': 'waiting', 'message': 'Waiting for an opponent...', 'uuid': '40ff8f49-200b-4639-836f-cfcdc5469a11'}
+2024-11-11 13:33:34,514 - INFO - Client Alice is waiting for an opponent.
+2024-11-11 13:33:48,496 - INFO - Connected to server at ('127.0.0.1', 65432)
+2024-11-11 13:33:48,496 - DEBUG - Sent: {'type': 'join', 'data': {'username': 'Bob', 'avatar': ''}}
+2024-11-11 13:33:48,496 - DEBUG - Received join_ack: {'status': 'success', 'game_id': '5e2b2bf6-52dd-447f-bbe0-f52a5fb5919b', 'player_symbol': 'O', 'uuid': 'bebe66e9-6bd6-4a55-a6ba-51ebdf48fab0'}
+2024-11-11 13:33:48,539 - INFO - Joined game 5e2b2bf6-52dd-447f-bbe0-f52a5fb5919b as 'O' with UUID bebe66e9-6bd6-4a55-a6ba-51ebdf48fab0.
+2024-11-11 15:11:14,105 - ERROR - Send error: [WinError 10053] An established connection was aborted by the software in your host machine
+2024-11-11 16:45:22,993 - INFO - Connected to server at ('127.0.0.1', 65432)
+2024-11-11 16:45:22,993 - DEBUG - Sent: {'type': 'join', 'data': {'username': 'Alice', 'avatar': ''}}
+2024-11-11 16:45:22,993 - DEBUG - Received join_ack: {'status': 'waiting', 'message': 'Waiting for an opponent...', 'uuid': 'ffee5b3d-a892-4637-a320-6a947261c53e'}
+2024-11-11 16:45:23,048 - INFO - Client Alice is waiting for an opponent.
+2024-11-11 16:45:41,056 - INFO - Connected to server at ('127.0.0.1', 65432)
+2024-11-11 16:45:41,056 - DEBUG - Sent: {'type': 'join', 'data': {'username': 'Bob', 'avatar': ''}}
+2024-11-11 16:45:41,056 - DEBUG - Received join_ack: {'status': 'success', 'game_id': '0e417634-cb7b-4b1b-9f55-98d62d4fbe56', 'player_symbol': 'X', 'uuid': 'ffee5b3d-a892-4637-a320-6a947261c53e'}
+2024-11-11 16:45:41,056 - DEBUG - Received join_ack: {'status': 'success', 'game_id': '0e417634-cb7b-4b1b-9f55-98d62d4fbe56', 'player_symbol': 'O', 'uuid': 'c3673c1a-f62f-4652-9855-5d8838ad377f'}
+2024-11-11 16:45:41,075 - INFO - Joined game 0e417634-cb7b-4b1b-9f55-98d62d4fbe56 as 'X' with UUID ffee5b3d-a892-4637-a320-6a947261c53e.
+2024-11-11 16:45:41,113 - INFO - Joined game 0e417634-cb7b-4b1b-9f55-98d62d4fbe56 as 'O' with UUID c3673c1a-f62f-4652-9855-5d8838ad377f.
+2024-11-11 16:45:53,517 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': '0e417634-cb7b-4b1b-9f55-98d62d4fbe56', 'position': [0, 0], 'uuid': 'ffee5b3d-a892-4637-a320-6a947261c53e'}}
+2024-11-11 16:45:53,517 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', ''], ['', '', ''], ['', '', '']], 'next_player_uuid': 'c3673c1a-f62f-4652-9855-5d8838ad377f', 'next_player_username': 'Bob', 'winner': None}
+2024-11-11 16:45:53,517 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', ''], ['', '', ''], ['', '', '']], 'next_player_uuid': 'c3673c1a-f62f-4652-9855-5d8838ad377f', 'next_player_username': 'Bob', 'winner': None}
+2024-11-11 16:45:58,169 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': '0e417634-cb7b-4b1b-9f55-98d62d4fbe56', 'position': [1, 1], 'uuid': 'c3673c1a-f62f-4652-9855-5d8838ad377f'}}
+2024-11-11 16:45:58,169 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', ''], ['', 'O', ''], ['', '', '']], 'next_player_uuid': 'ffee5b3d-a892-4637-a320-6a947261c53e', 'next_player_username': 'Alice', 'winner': None}
+2024-11-11 16:45:58,169 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', ''], ['', 'O', ''], ['', '', '']], 'next_player_uuid': 'ffee5b3d-a892-4637-a320-6a947261c53e', 'next_player_username': 'Alice', 'winner': None}
+2024-11-11 16:46:03,820 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': '0e417634-cb7b-4b1b-9f55-98d62d4fbe56', 'position': [0, 2], 'uuid': 'ffee5b3d-a892-4637-a320-6a947261c53e'}}
+2024-11-11 16:46:03,820 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', 'X'], ['', 'O', ''], ['', '', '']], 'next_player_uuid': 'c3673c1a-f62f-4652-9855-5d8838ad377f', 'next_player_username': 'Bob', 'winner': None}
+2024-11-11 16:46:03,820 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', 'X'], ['', 'O', ''], ['', '', '']], 'next_player_uuid': 'c3673c1a-f62f-4652-9855-5d8838ad377f', 'next_player_username': 'Bob', 'winner': None}
+2024-11-11 16:46:06,395 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': '0e417634-cb7b-4b1b-9f55-98d62d4fbe56', 'position': [2, 0], 'uuid': 'c3673c1a-f62f-4652-9855-5d8838ad377f'}}
+2024-11-11 16:46:06,395 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', 'X'], ['', 'O', ''], ['O', '', '']], 'next_player_uuid': 'ffee5b3d-a892-4637-a320-6a947261c53e', 'next_player_username': 'Alice', 'winner': None}
+2024-11-11 16:46:06,395 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', 'X'], ['', 'O', ''], ['O', '', '']], 'next_player_uuid': 'ffee5b3d-a892-4637-a320-6a947261c53e', 'next_player_username': 'Alice', 'winner': None}
+2024-11-11 16:46:09,145 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': '0e417634-cb7b-4b1b-9f55-98d62d4fbe56', 'position': [2, 2], 'uuid': 'ffee5b3d-a892-4637-a320-6a947261c53e'}}
+2024-11-11 16:46:09,145 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', 'X'], ['', 'O', ''], ['O', '', 'X']], 'next_player_uuid': 'c3673c1a-f62f-4652-9855-5d8838ad377f', 'next_player_username': 'Bob', 'winner': None}
+2024-11-11 16:46:09,145 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', 'X'], ['', 'O', ''], ['O', '', 'X']], 'next_player_uuid': 'c3673c1a-f62f-4652-9855-5d8838ad377f', 'next_player_username': 'Bob', 'winner': None}
+2024-11-11 16:46:12,240 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': '0e417634-cb7b-4b1b-9f55-98d62d4fbe56', 'position': [1, 2], 'uuid': 'c3673c1a-f62f-4652-9855-5d8838ad377f'}}
+2024-11-11 16:46:12,240 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', 'X'], ['', 'O', 'O'], ['O', '', 'X']], 'next_player_uuid': 'ffee5b3d-a892-4637-a320-6a947261c53e', 'next_player_username': 'Alice', 'winner': None}
+2024-11-11 16:46:12,240 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', 'X'], ['', 'O', 'O'], ['O', '', 'X']], 'next_player_uuid': 'ffee5b3d-a892-4637-a320-6a947261c53e', 'next_player_username': 'Alice', 'winner': None}
+2024-11-11 16:46:15,506 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': '0e417634-cb7b-4b1b-9f55-98d62d4fbe56', 'position': [0, 1], 'uuid': 'ffee5b3d-a892-4637-a320-6a947261c53e'}}
+2024-11-11 16:46:15,506 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', 'X', 'X'], ['', 'O', 'O'], ['O', '', 'X']], 'next_player_uuid': 'ffee5b3d-a892-4637-a320-6a947261c53e', 'next_player_username': 'Alice', 'winner': 'Alice'}
+2024-11-11 16:46:15,506 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', 'X', 'X'], ['', 'O', 'O'], ['O', '', 'X']], 'next_player_uuid': 'ffee5b3d-a892-4637-a320-6a947261c53e', 'next_player_username': 'Alice', 'winner': 'Alice'}
+2024-11-11 16:46:21,889 - DEBUG - Sent: {'type': 'new_game_response', 'data': {'game_id': '0e417634-cb7b-4b1b-9f55-98d62d4fbe56', 'uuid': 'ffee5b3d-a892-4637-a320-6a947261c53e', 'response': 'start'}}
+2024-11-11 16:46:32,500 - DEBUG - Sent: {'type': 'new_game_response', 'data': {'game_id': '0e417634-cb7b-4b1b-9f55-98d62d4fbe56', 'uuid': 'c3673c1a-f62f-4652-9855-5d8838ad377f', 'response': 'start'}}
+2024-11-11 16:47:54,833 - DEBUG - Sent: {'type': 'chat', 'data': {'game_id': '0e417634-cb7b-4b1b-9f55-98d62d4fbe56', 'message': 'hi', 'uuid': 'c3673c1a-f62f-4652-9855-5d8838ad377f'}}
+2024-11-11 16:48:55,547 - DEBUG - Sent: {'type': 'quit', 'data': {'game_id': '0e417634-cb7b-4b1b-9f55-98d62d4fbe56', 'uuid': 'ffee5b3d-a892-4637-a320-6a947261c53e'}}
+2024-11-11 16:48:55,547 - INFO - Disconnected from server
+2024-11-11 16:48:57,641 - DEBUG - Sent: {'type': 'quit', 'data': {'game_id': '0e417634-cb7b-4b1b-9f55-98d62d4fbe56', 'uuid': 'c3673c1a-f62f-4652-9855-5d8838ad377f'}}
+2024-11-11 16:48:57,658 - INFO - Disconnected from server
+2024-11-11 16:50:33,337 - INFO - Connected to server at ('127.0.0.1', 65432)
+2024-11-11 16:50:33,337 - DEBUG - Sent: {'type': 'join', 'data': {'username': 'Alice', 'avatar': ''}}
+2024-11-11 16:50:33,337 - DEBUG - Received join_ack: {'status': 'waiting', 'message': 'Waiting for an opponent...', 'uuid': '1135befb-0a7d-46dd-98bf-c330f9ead190'}
+2024-11-11 16:50:33,390 - INFO - Client Alice is waiting for an opponent.
+2024-11-11 16:50:42,234 - INFO - Connected to server at ('127.0.0.1', 65432)
+2024-11-11 16:50:42,234 - DEBUG - Sent: {'type': 'join', 'data': {'username': 'Bob', 'avatar': ''}}
+2024-11-11 16:50:42,234 - DEBUG - Received join_ack: {'status': 'success', 'game_id': '501bb6af-633e-479d-98f3-3414a9bffc25', 'player_symbol': 'X', 'uuid': '1135befb-0a7d-46dd-98bf-c330f9ead190'}
+2024-11-11 16:50:42,234 - DEBUG - Received join_ack: {'status': 'success', 'game_id': '501bb6af-633e-479d-98f3-3414a9bffc25', 'player_symbol': 'O', 'uuid': '61d8f2fa-6106-45dd-b570-180e9a5f74e4'}
+2024-11-11 16:50:42,243 - INFO - Joined game 501bb6af-633e-479d-98f3-3414a9bffc25 as 'X' with UUID 1135befb-0a7d-46dd-98bf-c330f9ead190.
+2024-11-11 16:50:42,289 - INFO - Joined game 501bb6af-633e-479d-98f3-3414a9bffc25 as 'O' with UUID 61d8f2fa-6106-45dd-b570-180e9a5f74e4.
+2024-11-11 16:50:52,802 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': '501bb6af-633e-479d-98f3-3414a9bffc25', 'position': [0, 0], 'uuid': '1135befb-0a7d-46dd-98bf-c330f9ead190'}}
+2024-11-11 16:50:52,802 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', ''], ['', '', ''], ['', '', '']], 'next_player_uuid': '61d8f2fa-6106-45dd-b570-180e9a5f74e4', 'next_player_username': 'Bob', 'winner': None}
+2024-11-11 16:50:52,802 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', ''], ['', '', ''], ['', '', '']], 'next_player_uuid': '61d8f2fa-6106-45dd-b570-180e9a5f74e4', 'next_player_username': 'Bob', 'winner': None}
+2024-11-11 16:50:55,844 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': '501bb6af-633e-479d-98f3-3414a9bffc25', 'position': [2, 2], 'uuid': '61d8f2fa-6106-45dd-b570-180e9a5f74e4'}}
+2024-11-11 16:50:55,844 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', ''], ['', '', ''], ['', '', 'O']], 'next_player_uuid': '1135befb-0a7d-46dd-98bf-c330f9ead190', 'next_player_username': 'Alice', 'winner': None}
+2024-11-11 16:50:55,844 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', ''], ['', '', ''], ['', '', 'O']], 'next_player_uuid': '1135befb-0a7d-46dd-98bf-c330f9ead190', 'next_player_username': 'Alice', 'winner': None}
+2024-11-11 16:50:57,814 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': '501bb6af-633e-479d-98f3-3414a9bffc25', 'position': [0, 2], 'uuid': '1135befb-0a7d-46dd-98bf-c330f9ead190'}}
+2024-11-11 16:50:57,814 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', 'X'], ['', '', ''], ['', '', 'O']], 'next_player_uuid': '61d8f2fa-6106-45dd-b570-180e9a5f74e4', 'next_player_username': 'Bob', 'winner': None}
+2024-11-11 16:50:57,814 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', 'X'], ['', '', ''], ['', '', 'O']], 'next_player_uuid': '61d8f2fa-6106-45dd-b570-180e9a5f74e4', 'next_player_username': 'Bob', 'winner': None}
+2024-11-11 16:50:59,336 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': '501bb6af-633e-479d-98f3-3414a9bffc25', 'position': [1, 1], 'uuid': '61d8f2fa-6106-45dd-b570-180e9a5f74e4'}}
+2024-11-11 16:50:59,336 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', 'X'], ['', 'O', ''], ['', '', 'O']], 'next_player_uuid': '1135befb-0a7d-46dd-98bf-c330f9ead190', 'next_player_username': 'Alice', 'winner': None}
+2024-11-11 16:50:59,336 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', 'X'], ['', 'O', ''], ['', '', 'O']], 'next_player_uuid': '1135befb-0a7d-46dd-98bf-c330f9ead190', 'next_player_username': 'Alice', 'winner': None}
+2024-11-11 16:51:02,510 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': '501bb6af-633e-479d-98f3-3414a9bffc25', 'position': [1, 0], 'uuid': '1135befb-0a7d-46dd-98bf-c330f9ead190'}}
+2024-11-11 16:51:02,510 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', 'X'], ['X', 'O', ''], ['', '', 'O']], 'next_player_uuid': '61d8f2fa-6106-45dd-b570-180e9a5f74e4', 'next_player_username': 'Bob', 'winner': None}
+2024-11-11 16:51:02,510 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', 'X'], ['X', 'O', ''], ['', '', 'O']], 'next_player_uuid': '61d8f2fa-6106-45dd-b570-180e9a5f74e4', 'next_player_username': 'Bob', 'winner': None}
+2024-11-11 16:51:04,651 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': '501bb6af-633e-479d-98f3-3414a9bffc25', 'position': [0, 1], 'uuid': '61d8f2fa-6106-45dd-b570-180e9a5f74e4'}}
+2024-11-11 16:51:04,651 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', 'O', 'X'], ['X', 'O', ''], ['', '', 'O']], 'next_player_uuid': '1135befb-0a7d-46dd-98bf-c330f9ead190', 'next_player_username': 'Alice', 'winner': None}
+2024-11-11 16:51:04,651 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', 'O', 'X'], ['X', 'O', ''], ['', '', 'O']], 'next_player_uuid': '1135befb-0a7d-46dd-98bf-c330f9ead190', 'next_player_username': 'Alice', 'winner': None}
+2024-11-11 16:51:06,746 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': '501bb6af-633e-479d-98f3-3414a9bffc25', 'position': [2, 0], 'uuid': '1135befb-0a7d-46dd-98bf-c330f9ead190'}}
+2024-11-11 16:51:06,746 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', 'O', 'X'], ['X', 'O', ''], ['X', '', 'O']], 'next_player_uuid': '1135befb-0a7d-46dd-98bf-c330f9ead190', 'next_player_username': 'Alice', 'winner': 'Alice'}
+2024-11-11 16:51:06,746 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', 'O', 'X'], ['X', 'O', ''], ['X', '', 'O']], 'next_player_uuid': '1135befb-0a7d-46dd-98bf-c330f9ead190', 'next_player_username': 'Alice', 'winner': 'Alice'}
+2024-11-11 16:51:15,434 - DEBUG - Sent: {'type': 'new_game_response', 'data': {'game_id': '501bb6af-633e-479d-98f3-3414a9bffc25', 'uuid': '1135befb-0a7d-46dd-98bf-c330f9ead190', 'response': 'start'}}
+2024-11-11 16:51:17,355 - DEBUG - Sent: {'type': 'new_game_response', 'data': {'game_id': '501bb6af-633e-479d-98f3-3414a9bffc25', 'uuid': '61d8f2fa-6106-45dd-b570-180e9a5f74e4', 'response': 'start'}}
+2024-11-11 16:52:23,262 - INFO - Disconnected from server
+2024-11-11 16:59:13,238 - INFO - Connected to server at ('127.0.0.1', 65432)
+2024-11-11 16:59:13,238 - DEBUG - Sent: {'type': 'join', 'data': {'username': 'Alice', 'avatar': ''}}
+2024-11-11 16:59:13,238 - DEBUG - Received join_ack: {'status': 'waiting', 'message': 'Waiting for an opponent...', 'uuid': '676d7965-6a17-4554-8df7-d8c739787340'}
+2024-11-11 16:59:13,291 - INFO - Client Alice is waiting for an opponent.
+2024-11-11 16:59:20,983 - INFO - Connected to server at ('127.0.0.1', 65432)
+2024-11-11 16:59:20,983 - DEBUG - Sent: {'type': 'join', 'data': {'username': 'Bob', 'avatar': ''}}
+2024-11-11 16:59:20,983 - DEBUG - Received join_ack: {'status': 'success', 'game_id': 'f82a8553-e7a4-4e14-9b7d-4d597f5936f1', 'player_symbol': 'X', 'uuid': '676d7965-6a17-4554-8df7-d8c739787340'}
+2024-11-11 16:59:20,983 - DEBUG - Received join_ack: {'status': 'success', 'game_id': 'f82a8553-e7a4-4e14-9b7d-4d597f5936f1', 'player_symbol': 'O', 'uuid': '96cfaa54-e83c-497c-84bf-48aa282fbb5c'}
+2024-11-11 16:59:20,983 - INFO - Joined game f82a8553-e7a4-4e14-9b7d-4d597f5936f1 as 'X' with UUID 676d7965-6a17-4554-8df7-d8c739787340.
+2024-11-11 16:59:21,036 - INFO - Joined game f82a8553-e7a4-4e14-9b7d-4d597f5936f1 as 'O' with UUID 96cfaa54-e83c-497c-84bf-48aa282fbb5c.
+2024-11-11 16:59:27,329 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': 'f82a8553-e7a4-4e14-9b7d-4d597f5936f1', 'position': [0, 0], 'uuid': '676d7965-6a17-4554-8df7-d8c739787340'}}
+2024-11-11 16:59:27,329 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', ''], ['', '', ''], ['', '', '']], 'next_player_uuid': '96cfaa54-e83c-497c-84bf-48aa282fbb5c', 'next_player_username': 'Bob', 'winner': None}
+2024-11-11 16:59:27,329 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', ''], ['', '', ''], ['', '', '']], 'next_player_uuid': '96cfaa54-e83c-497c-84bf-48aa282fbb5c', 'next_player_username': 'Bob', 'winner': None}
+2024-11-11 16:59:29,638 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': 'f82a8553-e7a4-4e14-9b7d-4d597f5936f1', 'position': [0, 2], 'uuid': '96cfaa54-e83c-497c-84bf-48aa282fbb5c'}}
+2024-11-11 16:59:29,638 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', 'O'], ['', '', ''], ['', '', '']], 'next_player_uuid': '676d7965-6a17-4554-8df7-d8c739787340', 'next_player_username': 'Alice', 'winner': None}
+2024-11-11 16:59:29,638 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', 'O'], ['', '', ''], ['', '', '']], 'next_player_uuid': '676d7965-6a17-4554-8df7-d8c739787340', 'next_player_username': 'Alice', 'winner': None}
+2024-11-11 16:59:31,110 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': 'f82a8553-e7a4-4e14-9b7d-4d597f5936f1', 'position': [1, 1], 'uuid': '676d7965-6a17-4554-8df7-d8c739787340'}}
+2024-11-11 16:59:31,110 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', 'O'], ['', 'X', ''], ['', '', '']], 'next_player_uuid': '96cfaa54-e83c-497c-84bf-48aa282fbb5c', 'next_player_username': 'Bob', 'winner': None}
+2024-11-11 16:59:31,113 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', 'O'], ['', 'X', ''], ['', '', '']], 'next_player_uuid': '96cfaa54-e83c-497c-84bf-48aa282fbb5c', 'next_player_username': 'Bob', 'winner': None}
+2024-11-11 16:59:34,365 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': 'f82a8553-e7a4-4e14-9b7d-4d597f5936f1', 'position': [2, 0], 'uuid': '96cfaa54-e83c-497c-84bf-48aa282fbb5c'}}
+2024-11-11 16:59:34,365 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', 'O'], ['', 'X', ''], ['O', '', '']], 'next_player_uuid': '676d7965-6a17-4554-8df7-d8c739787340', 'next_player_username': 'Alice', 'winner': None}
+2024-11-11 16:59:34,365 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', 'O'], ['', 'X', ''], ['O', '', '']], 'next_player_uuid': '676d7965-6a17-4554-8df7-d8c739787340', 'next_player_username': 'Alice', 'winner': None}
+2024-11-11 16:59:37,250 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': 'f82a8553-e7a4-4e14-9b7d-4d597f5936f1', 'position': [2, 2], 'uuid': '676d7965-6a17-4554-8df7-d8c739787340'}}
+2024-11-11 16:59:37,250 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', 'O'], ['', 'X', ''], ['O', '', 'X']], 'next_player_uuid': '676d7965-6a17-4554-8df7-d8c739787340', 'next_player_username': 'Alice', 'winner': 'Alice'}
+2024-11-11 16:59:37,250 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', 'O'], ['', 'X', ''], ['O', '', 'X']], 'next_player_uuid': '676d7965-6a17-4554-8df7-d8c739787340', 'next_player_username': 'Alice', 'winner': 'Alice'}
+2024-11-11 16:59:47,900 - DEBUG - Sent: {'type': 'new_game_response', 'data': {'game_id': 'f82a8553-e7a4-4e14-9b7d-4d597f5936f1', 'uuid': '676d7965-6a17-4554-8df7-d8c739787340', 'response': 'start'}}
+2024-11-11 16:59:47,900 - DEBUG - Received game_over: {'winner': 'Alice', 'game_id': 'f82a8553-e7a4-4e14-9b7d-4d597f5936f1'}
+2024-11-11 16:59:49,709 - DEBUG - Sent: {'type': 'new_game_response', 'data': {'game_id': 'f82a8553-e7a4-4e14-9b7d-4d597f5936f1', 'uuid': '676d7965-6a17-4554-8df7-d8c739787340', 'response': 'start'}}
+2024-11-11 16:59:51,197 - DEBUG - Sent: {'type': 'new_game_response', 'data': {'game_id': 'f82a8553-e7a4-4e14-9b7d-4d597f5936f1', 'uuid': '96cfaa54-e83c-497c-84bf-48aa282fbb5c', 'response': 'start'}}
+2024-11-11 16:59:51,197 - DEBUG - Received new_game: {'status': 'success', 'game_state': [['', '', ''], ['', '', ''], ['', '', '']], 'next_player_uuid': '676d7965-6a17-4554-8df7-d8c739787340', 'next_player_username': 'Alice'}
+2024-11-11 16:59:51,197 - DEBUG - Received game_over: {'winner': 'Alice', 'game_id': 'f82a8553-e7a4-4e14-9b7d-4d597f5936f1'}
+2024-11-11 16:59:53,158 - DEBUG - Sent: {'type': 'new_game_response', 'data': {'game_id': 'f82a8553-e7a4-4e14-9b7d-4d597f5936f1', 'uuid': '96cfaa54-e83c-497c-84bf-48aa282fbb5c', 'response': 'start'}}
+2024-11-11 16:59:53,158 - DEBUG - Received new_game: {'status': 'success', 'game_state': [['', '', ''], ['', '', ''], ['', '', '']], 'next_player_uuid': '676d7965-6a17-4554-8df7-d8c739787340', 'next_player_username': 'Alice'}
+2024-11-11 16:59:55,528 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': 'f82a8553-e7a4-4e14-9b7d-4d597f5936f1', 'position': [2, 2], 'uuid': '676d7965-6a17-4554-8df7-d8c739787340'}}
+2024-11-11 17:14:52,320 - ERROR - Send error: [WinError 10053] An established connection was aborted by the software in your host machine
+2024-11-11 17:14:54,731 - ERROR - Send error: [WinError 10053] An established connection was aborted by the software in your host machine
+2024-11-11 17:20:33,751 - INFO - Connected to server at ('127.0.0.1', 65432)
+2024-11-11 17:20:33,751 - DEBUG - Sent: {'type': 'join', 'data': {'username': 'Bob', 'avatar': ''}}
+2024-11-11 17:20:33,769 - ERROR - Socket error: [WinError 10054] An existing connection was forcibly closed by the remote host
+2024-11-11 17:20:54,510 - INFO - Connected to server at ('127.0.0.1', 65432)
+2024-11-11 17:20:54,510 - DEBUG - Sent: {'type': 'join', 'data': {'username': 'Bob', 'avatar': ''}}
+2024-11-11 17:20:54,510 - DEBUG - Received join_ack: {'status': 'waiting', 'message': 'Waiting for an opponent...', 'uuid': '30abc440-474a-4535-9f17-83ec0da913f3'}
+2024-11-11 17:20:54,549 - INFO - Client Bob is waiting for an opponent.
+2024-11-11 17:21:05,637 - INFO - Connected to server at ('127.0.0.1', 65432)
+2024-11-11 17:21:05,637 - DEBUG - Sent: {'type': 'join', 'data': {'username': 'Alice', 'avatar': ''}}
+2024-11-11 17:21:05,653 - DEBUG - Received join_ack: {'status': 'success', 'game_id': '4c8de105-0c11-4e9c-9a92-2b41c4dbc3d2', 'player_symbol': 'X', 'uuid': '30abc440-474a-4535-9f17-83ec0da913f3'}
+2024-11-11 17:21:05,653 - DEBUG - Received join_ack: {'status': 'success', 'game_id': '4c8de105-0c11-4e9c-9a92-2b41c4dbc3d2', 'player_symbol': 'O', 'uuid': '8745aa7e-6780-4d0d-ba97-7983309dcadc'}
+2024-11-11 17:21:05,653 - INFO - Joined game 4c8de105-0c11-4e9c-9a92-2b41c4dbc3d2 as 'X' with UUID 30abc440-474a-4535-9f17-83ec0da913f3.
+2024-11-11 17:21:05,719 - INFO - Joined game 4c8de105-0c11-4e9c-9a92-2b41c4dbc3d2 as 'O' with UUID 8745aa7e-6780-4d0d-ba97-7983309dcadc.
+2024-11-11 17:21:10,983 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': '4c8de105-0c11-4e9c-9a92-2b41c4dbc3d2', 'position': [1, 0], 'uuid': '30abc440-474a-4535-9f17-83ec0da913f3'}}
+2024-11-11 17:21:10,983 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['', '', ''], ['X', '', ''], ['', '', '']], 'next_player_uuid': '8745aa7e-6780-4d0d-ba97-7983309dcadc', 'next_player_username': 'Alice', 'winner': None}
+2024-11-11 17:21:10,999 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['', '', ''], ['X', '', ''], ['', '', '']], 'next_player_uuid': '8745aa7e-6780-4d0d-ba97-7983309dcadc', 'next_player_username': 'Alice', 'winner': None}
+2024-11-11 17:21:13,525 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': '4c8de105-0c11-4e9c-9a92-2b41c4dbc3d2', 'position': [2, 2], 'uuid': '8745aa7e-6780-4d0d-ba97-7983309dcadc'}}
+2024-11-11 17:21:13,525 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['', '', ''], ['X', '', ''], ['', '', 'O']], 'next_player_uuid': '30abc440-474a-4535-9f17-83ec0da913f3', 'next_player_username': 'Bob', 'winner': None}
+2024-11-11 17:21:13,525 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['', '', ''], ['X', '', ''], ['', '', 'O']], 'next_player_uuid': '30abc440-474a-4535-9f17-83ec0da913f3', 'next_player_username': 'Bob', 'winner': None}
+2024-11-11 17:21:15,542 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': '4c8de105-0c11-4e9c-9a92-2b41c4dbc3d2', 'position': [2, 0], 'uuid': '30abc440-474a-4535-9f17-83ec0da913f3'}}
+2024-11-11 17:21:15,542 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['', '', ''], ['X', '', ''], ['X', '', 'O']], 'next_player_uuid': '8745aa7e-6780-4d0d-ba97-7983309dcadc', 'next_player_username': 'Alice', 'winner': None}
+2024-11-11 17:21:15,542 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['', '', ''], ['X', '', ''], ['X', '', 'O']], 'next_player_uuid': '8745aa7e-6780-4d0d-ba97-7983309dcadc', 'next_player_username': 'Alice', 'winner': None}
+2024-11-11 17:21:17,816 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': '4c8de105-0c11-4e9c-9a92-2b41c4dbc3d2', 'position': [1, 2], 'uuid': '8745aa7e-6780-4d0d-ba97-7983309dcadc'}}
+2024-11-11 17:21:17,816 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['', '', ''], ['X', '', 'O'], ['X', '', 'O']], 'next_player_uuid': '30abc440-474a-4535-9f17-83ec0da913f3', 'next_player_username': 'Bob', 'winner': None}
+2024-11-11 17:21:17,816 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['', '', ''], ['X', '', 'O'], ['X', '', 'O']], 'next_player_uuid': '30abc440-474a-4535-9f17-83ec0da913f3', 'next_player_username': 'Bob', 'winner': None}
+2024-11-11 17:21:19,532 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': '4c8de105-0c11-4e9c-9a92-2b41c4dbc3d2', 'position': [0, 0], 'uuid': '30abc440-474a-4535-9f17-83ec0da913f3'}}
+2024-11-11 17:21:19,547 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', ''], ['X', '', 'O'], ['X', '', 'O']], 'next_player_uuid': '30abc440-474a-4535-9f17-83ec0da913f3', 'next_player_username': 'Bob', 'winner': 'Bob'}
+2024-11-11 17:21:19,547 - DEBUG - Received move_ack: {'status': 'success', 'game_state': [['X', '', ''], ['X', '', 'O'], ['X', '', 'O']], 'next_player_uuid': '30abc440-474a-4535-9f17-83ec0da913f3', 'next_player_username': 'Bob', 'winner': 'Bob'}
+2024-11-11 17:21:21,838 - DEBUG - Sent: {'type': 'new_game_response', 'data': {'game_id': '4c8de105-0c11-4e9c-9a92-2b41c4dbc3d2', 'uuid': '30abc440-474a-4535-9f17-83ec0da913f3', 'response': 'start'}}
+2024-11-11 17:21:21,838 - DEBUG - Received game_over: {'winner': 'Bob', 'game_id': '4c8de105-0c11-4e9c-9a92-2b41c4dbc3d2'}
+2024-11-11 17:21:23,122 - DEBUG - Sent: {'type': 'new_game_response', 'data': {'game_id': '4c8de105-0c11-4e9c-9a92-2b41c4dbc3d2', 'uuid': '30abc440-474a-4535-9f17-83ec0da913f3', 'response': 'start'}}
+2024-11-11 17:21:24,146 - DEBUG - Sent: {'type': 'new_game_response', 'data': {'game_id': '4c8de105-0c11-4e9c-9a92-2b41c4dbc3d2', 'uuid': '8745aa7e-6780-4d0d-ba97-7983309dcadc', 'response': 'start'}}
+2024-11-11 17:21:24,146 - DEBUG - Received new_game: {'status': 'success', 'game_state': [['', '', ''], ['', '', ''], ['', '', '']], 'next_player_uuid': '30abc440-474a-4535-9f17-83ec0da913f3', 'next_player_username': 'Bob'}
+2024-11-11 17:21:24,146 - DEBUG - Received game_over: {'winner': 'Bob', 'game_id': '4c8de105-0c11-4e9c-9a92-2b41c4dbc3d2'}
+2024-11-11 17:21:25,430 - DEBUG - Sent: {'type': 'new_game_response', 'data': {'game_id': '4c8de105-0c11-4e9c-9a92-2b41c4dbc3d2', 'uuid': '8745aa7e-6780-4d0d-ba97-7983309dcadc', 'response': 'start'}}
+2024-11-11 17:21:25,430 - DEBUG - Received new_game: {'status': 'success', 'game_state': [['', '', ''], ['', '', ''], ['', '', '']], 'next_player_uuid': '30abc440-474a-4535-9f17-83ec0da913f3', 'next_player_username': 'Bob'}
+2024-11-11 17:21:28,093 - DEBUG - Sent: {'type': 'move', 'data': {'game_id': '4c8de105-0c11-4e9c-9a92-2b41c4dbc3d2', 'position': [0, 2], 'uuid': '30abc440-474a-4535-9f17-83ec0da913f3'}}
