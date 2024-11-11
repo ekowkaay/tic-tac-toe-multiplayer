@@ -287,7 +287,7 @@ All messages between the client and server are in JSON format. Each message cons
 
 ### Game State Synchronization
 - **Centralized Game State**: The server maintains the master game state and synchronizes it across all clients. Each time a player makes a valid move, the server updates the game state and broadcasts it to all connected clients, ensuring consistency.
-- **Disconnection Handling**: The server tracks player connections. If a player disconnects mid-game, the server can notify the remaining player and close the game gracefully.
+- **Disconnection Handling**: The server tracks player connections. If a player disconnects mid-game, the server notifies the remaining player and closes the game gracefully.
 - **Consistent Gameplay**: All players have a synchronized view of the game board, ensuring no discrepancies between client states.
 
 ### Client-Side Game Rendering
@@ -300,9 +300,8 @@ All messages between the client and server are in JSON format. Each message cons
 - **Usernames and Avatars**: Players can choose a username when connecting. If a username is not provided, the server assigns a default one. Players can also specify an avatar, adding a personal touch to their gameplay experience.
 
 ## How It Works
-- The **server** handles player connections, game rules, and turn management.
-- The **clients** connect to the server, make moves, and display the game board.
-
+- The **server** handles player connections, game rules, turn management, and game state synchronization.
+- The **clients** connect to the server, make moves, and render the game board based on server updates.
 
 How to Play
 Players take turns entering their move by specifying the row and column (e.g., 1,1 for the top-left corner).
