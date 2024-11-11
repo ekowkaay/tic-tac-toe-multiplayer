@@ -20,7 +20,7 @@ class TestTurnBasedGameplay(unittest.TestCase):
         cls.server_process.terminate()
         cls.server_process.wait()
 
-    def test_turn_enforcement(self):
+    def test_turn_enforcement_and_winning_conditions(self):
         # Set up logging for the test
         logging.basicConfig(level=logging.INFO,
                             format='%(asctime)s - %(levelname)s - %(message)s')
@@ -79,11 +79,11 @@ class TestTurnBasedGameplay(unittest.TestCase):
 
             # Simulate turns
             moves = [
-                (current_client, [0, 0]),  # First player (X) makes the first move
-                (other_client, [1, 1]),    # Second player (O) makes their move
-                (current_client, [0, 1]),  # First player (X)
-                (other_client, [1, 2]),    # Second player (O)
-                (current_client, [0, 2])   # First player (X) - should be the winning move
+                (current_client, [0, 0]),  # Current player (X) makes the first move
+                (other_client, [1, 1]),    # Other player (O) makes their move
+                (current_client, [0, 1]),  # X
+                (other_client, [1, 2]),    # O
+                (current_client, [0, 2])   # X - Winning Move
             ]
 
             for client, position in moves:
@@ -105,10 +105,11 @@ class TestTurnBasedGameplay(unittest.TestCase):
             # Wait for game over
             game_over.wait(timeout=5)
 
-            # Verify the outcome: First player (X) should have won
-            winning_symbol = 'X'
-            winner_client = current_client if current_client.player_symbol == winning_symbol else other_client
+            # Determine the winner
+            winner_client = current_client if current_client.game_over and \
+                             current_client.player_symbol == 'X' else other_client
 
+            # Verify that the winner is the current_client with symbol 'X'
             self.assertTrue(winner_client.game_over, "Game should be over with a winner.")
             self.assertEqual(winner_client.game_state[0][0], 'X')
             self.assertEqual(winner_client.game_state[0][1], 'X')

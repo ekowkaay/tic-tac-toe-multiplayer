@@ -13,8 +13,8 @@ import uuid
 class Client:
     def __init__(self, host='127.0.0.1', port=65432, username=None, avatar=None):
         self.server_address = (host, port)
-        self.username = username if username is not None else input("Enter your username: ") or f"Player_{uuid.uuid4().hex[:6]}"
-        self.avatar = avatar if avatar is not None else input("Enter your avatar (optional): ")
+        self.username = username or f"Player_{uuid.uuid4().hex[:6]}"
+        self.avatar = avatar or ""
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.connected = False
         self.game_id = None
@@ -237,7 +237,7 @@ class Client:
             else:
                 break  # No message received, possibly due to disconnection
 
-def main():
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Tic-Tac-Toe Client")
     parser.add_argument('--host', default='127.0.0.1', help='Server host')
     parser.add_argument('--port', type=int, default=65432, help='Server port')
@@ -258,6 +258,3 @@ def main():
             client.disconnect()
     else:
         print("Failed to connect to the server.")
-
-if __name__ == '__main__':
-    main()
