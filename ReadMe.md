@@ -295,6 +295,11 @@ All messages between the client and server are in JSON format. Each message cons
 - **Player Feedback**: The client provides clear messages to the player, such as indicating whose turn it is, notifying of any errors (e.g., "It is not your turn"), and displaying the game result (e.g., win, lose, or draw).
 - **Game Progress Visualization**: The client displays the game board after each move, ensuring that players have a clear and consistent view of the current game state.
 
+### Client-Side Game Rendering
+- **Graphical User Interface (GUI)**: Developed using `Tkinter` to provide a visually appealing and user-friendly interface.
+- **Game Board Display**: The game board is displayed as a 3x3 grid of buttons that players can click to make moves.
+- **Player Information and Status**: Displays player information, including usernames and symbols (X or O), and shows current game status (e.g., whose turn it is).
+
 ### Player Identification
 - **Unique Identifiers**: Each player is assigned a unique identifier (UUID) upon connecting to the server, allowing the server to track players accurately throughout the game.
 - **Usernames and Avatars**: Players can choose a username when connecting. If a username is not provided, the server assigns a default one. Players can also specify an avatar, adding a personal touch to their gameplay experience.
