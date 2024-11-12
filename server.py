@@ -9,8 +9,15 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 import uuid
 
-# Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# Configure logging to write to a file and console
+logging.basicConfig(
+    level=logging.DEBUG,  # Set to DEBUG for more detailed logs
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler("server.log"),
+        logging.StreamHandler()
+    ]
+)
 
 class Game:
     def __init__(self, game_id, server):
@@ -20,65 +27,50 @@ class Game:
         self.board = [['' for _ in range(3)] for _ in range(3)]
         self.current_player_index = 0
         self.winner = None
-        self.lock = threading.Lock()  # To ensure thread-safe operations
-        self.restart_votes = {}  # To track restart requests
+        self.lock = threading.Lock()
+        self.new_game_requests = set()
 
-    def add_player(self, player_info):
-        self.players.append(player_info)
+    def add_player(self, client_info):
+        self.players.append(client_info)
 
     def make_move(self, player_uuid, position):
         with self.lock:
-            # Ensure the game is still active
             if self.winner:
                 return {'status': 'failure', 'code': 'game_over', 'message': 'The game has already ended.'}
 
-            # Find the player object
             player = next((p for p in self.players if p['uuid'] == player_uuid), None)
             if not player:
                 return {'status': 'failure', 'code': 'invalid_player', 'message': 'Player not found in the game.'}
 
-            # Check if it's the player's turn
             current_player = self.players[self.current_player_index]
             if current_player['uuid'] != player_uuid:
                 return {'status': 'failure', 'code': 'not_your_turn', 'message': 'It is not your turn.'}
 
-            # Validate position
             row, col = position
             if not (0 <= row <= 2 and 0 <= col <= 2):
                 return {'status': 'failure', 'code': 'invalid_position', 'message': 'Position out of bounds.'}
             if self.board[row][col]:
                 return {'status': 'failure', 'code': 'invalid_move', 'message': 'Position already occupied.'}
 
-            # Make the move
-            symbol = player['symbol']
-            self.board[row][col] = symbol
-            logging.info(f"Game {self.game_id}: {player['username']} placed '{symbol}' at position ({row}, {col}).")
+            self.board[row][col] = player['symbol']
+            logging.info(f"Game {self.game_id}: {player['username']} placed '{player['symbol']}' at position ({row}, {col}).")
 
-            # Check for winning conditions
-            if self.check_winner(symbol):
+            if self.check_winner(player['symbol']):
                 self.winner = player
                 logging.info(f"Game {self.game_id}: {player['username']} has won the game.")
             elif self.is_draw():
                 self.winner = 'draw'
                 logging.info(f"Game {self.game_id}: The game ended in a draw.")
             else:
-                # Toggle turn to the next player
                 self.current_player_index = (self.current_player_index + 1) % len(self.players)
                 logging.info(f"Game {self.game_id}: It is now {self.players[self.current_player_index]['username']}'s turn.")
 
             return {'status': 'success'}
 
     def check_winner(self, symbol):
-        # Check rows, columns, and diagonals for a win
-        lines = []
-
-        # Rows and Columns
-        lines.extend(self.board)  # Rows
-        lines.extend([list(col) for col in zip(*self.board)])  # Columns
-
-        # Diagonals
-        lines.append([self.board[i][i] for i in range(3)])
-        lines.append([self.board[i][2 - i] for i in range(3)])
+        lines = self.board.copy()
+        lines += [list(col) for col in zip(*self.board)]
+        lines += [[self.board[i][i] for i in range(3)], [self.board[i][2 - i] for i in range(3)]]
 
         for line in lines:
             if all(cell == symbol for cell in line):
@@ -100,16 +92,33 @@ class Game:
             return None
 
     def remove_player(self, player_uuid):
-        with self.lock:
-            self.players = [player for player in self.players if player['uuid'] != player_uuid]
+        self.players = [p for p in self.players if p['uuid'] != player_uuid]
 
-    def reset_game_state(self):
+    def handle_new_game_request(self, player_uuid):
         with self.lock:
-            self.board = [['' for _ in range(3)] for _ in range(3)]
-            self.current_player_index = 0
-            self.winner = None
-            self.restart_votes = {}
-            logging.info(f"Game {self.game_id}: Game state has been reset.")
+            self.new_game_requests.add(player_uuid)
+            if len(self.new_game_requests) == len(self.players):
+                self.reset_game()
+                self.new_game_requests.clear()
+
+    def reset_game(self):
+        self.board = [['' for _ in range(3)] for _ in range(3)]
+        self.current_player_index = 0
+        self.winner = None
+        logging.info(f"Game {self.game_id} has been reset for a new round.")
+
+        for player in self.players:
+            response = {
+                "type": "new_game",
+                "data": {
+                    "status": "success",
+                    "game_state": self.board,
+                    "next_player_uuid": self.players[self.current_player_index]['uuid'],
+                    "next_player_username": self.players[self.current_player_index]['username']
+                }
+            }
+            self.server.send_message(player['socket'], response)
+            logging.debug(f"Sent new_game to {player['username']}: {response}")
 
 class Server:
     def __init__(self, host='127.0.0.1', port=65432, max_workers=10):
@@ -120,7 +129,7 @@ class Server:
         self.clients = {}  # key: client_socket.fileno(), value: client_info dictionary
         self.games = {}    # key: game_id, value: Game instance
         self.waiting_client = None  # A client_info dictionary waiting for an opponent
-        self.lock = threading.Lock()  # To protect shared resources
+        self.lock = threading.Lock()
 
     def setup_server_socket(self):
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -152,6 +161,7 @@ class Server:
 
     def assign_to_game(self, client_info):
         with self.lock:
+            logging.debug(f"Assigning {client_info['username']} to a game.")
             if self.waiting_client:
                 # Start a new game
                 game_id = str(uuid.uuid4())
@@ -174,8 +184,10 @@ class Server:
                 self.send_join_ack(self.waiting_client['socket'], game_id, self.waiting_client['symbol'], self.waiting_client['uuid'])
                 self.send_join_ack(client_info['socket'], game_id, client_info['symbol'], client_info['uuid'])
 
-                # Clear the waiting client
+                # Notify the server
                 logging.info(f"Game {game_id} started between {self.waiting_client['username']} and {client_info['username']}")
+
+                # Clear the waiting client
                 self.waiting_client = None
             else:
                 # Wait for another player
@@ -203,6 +215,7 @@ class Server:
             }
         }
         self.send_message(client_socket, response)
+        logging.debug(f"Sent join_ack to {client_socket.getpeername()}: {response}")
 
     def handle_join(self, client_socket, data):
         username = data.get('username') or f"Player_{uuid.uuid4().hex[:6]}"
@@ -245,16 +258,26 @@ class Server:
                     "data": {
                         "status": "success",
                         "game_state": game.board,
-                        "next_player_uuid": game.current_player_info()['uuid'] if not game.winner else None,
-                        "next_player_username": game.current_player_info()['username'] if not game.winner else None,
+                        "next_player_uuid": game.current_player_info()['uuid'],
+                        "next_player_username": game.current_player_info()['username'],
                         "winner": game.winner_username()
                     }
                 }
                 self.send_message(player['socket'], response)
-            # If game is over, handle game over logic
+                logging.debug(f"Sent move_ack to {player['username']}: {response}")
+            # If game is over, notify for new game or quit
             if game.winner:
-                logging.info(f"Game {game_id} ended. Winner: {game.winner_username()}")
-                # Do not remove the game from active games to allow for restart
+                logging.info(f"Game {game.game_id} ended. Winner: {game.winner_username()}")
+                for player in game.players:
+                    response = {
+                        "type": "game_over",
+                        "data": {
+                            "winner": game.winner_username(),
+                            "game_id": game.game_id
+                        }
+                    }
+                    self.send_message(player['socket'], response)
+                    logging.debug(f"Sent game_over to {player['username']}: {response}")
         else:
             self.send_error(client_socket, result['code'], result['message'])
 
@@ -287,7 +310,7 @@ class Server:
         }
         for player in game.players:
             self.send_message(player['socket'], broadcast)
-        logging.info(f"Game {game_id}: {sender_info['username']} says: {message}")
+        logging.info(f"Game {game.game_id}: {sender_info['username']} says: {message}")
 
     def handle_quit(self, client_socket, data):
         game_id = data.get('game_id')
@@ -320,20 +343,22 @@ class Server:
                 }
             }
             self.send_message(player['socket'], response)
+            logging.debug(f"Sent quit_ack to {player['username']}: {response}")
 
-        logging.info(f"Game {game_id}: {player_info['username']} has quit the game.")
+        logging.info(f"Game {game.game_id}: {player_info['username']} has quit the game.")
 
         # If no players left, remove the game
         if not game.players:
-            self.games.pop(game_id, None)
-            logging.info(f"Game {game_id} has been removed due to no remaining players.")
+            self.games.pop(game.game_id, None)
+            logging.info(f"Game {game.game_id} has been removed due to no remaining players.")
 
-    def handle_restart(self, client_socket, data):
+    def handle_new_game_response(self, client_socket, data):
         game_id = data.get('game_id')
         player_uuid = data.get('uuid')
+        response = data.get('response')  # 'start' or 'quit'
 
-        if not game_id or not player_uuid:
-            self.send_error(client_socket, "missing_data", "Game ID and UUID are required.")
+        if not game_id or not player_uuid or response not in ['start', 'quit']:
+            self.send_error(client_socket, "invalid_data", "Invalid game_id, uuid, or response.")
             return
 
         game = self.games.get(game_id)
@@ -341,49 +366,15 @@ class Server:
             self.send_error(client_socket, "invalid_game", "Game not found.")
             return
 
-        with game.lock:
-            player_info = next((p for p in game.players if p['uuid'] == player_uuid), None)
-            if not player_info:
-                self.send_error(client_socket, "invalid_player", "Player not found in the game.")
-                return
-
-            # Record the player's vote to restart
-            game.restart_votes[player_uuid] = True
-            logging.info(f"Game {game_id}: {player_info['username']} wants to restart the game.")
-
-            # Check if all players have agreed to restart
-            if len(game.restart_votes) == len(game.players):
-                # Reset the game state
-                game.reset_game_state()
-                # Notify all players
-                for player in game.players:
-                    response = {
-                        "type": "restart_ack",
-                        "data": {
-                            "status": "success",
-                            "message": "Game restarted!",
-                            "game_state": game.board,
-                            "next_player_uuid": game.current_player_info()['uuid'],
-                            "next_player_username": game.current_player_info()['username']
-                        }
-                    }
-                    self.send_message(player['socket'], response)
-                logging.info(f"Game {game_id}: Game has been restarted.")
-            else:
-                # Notify the player that we're waiting for others
-                response = {
-                    "type": "restart_ack",
-                    "data": {
-                        "status": "waiting",
-                        "message": "Waiting for other player to agree to restart."
-                    }
-                }
-                self.send_message(client_socket, response)
+        if response == 'start':
+            game.handle_new_game_request(player_uuid)
+        elif response == 'quit':
+            self.handle_quit(client_socket, data)
 
     def handle_client(self, client_socket, address):
         thread_name = threading.current_thread().name
         logging.info(f"[{thread_name}] Connection established with {address}")
-        client_socket.settimeout(300)  # Set client socket timeout to 5 minutes
+        client_socket.settimeout(600)  # Set client socket timeout to 10 minutes
         try:
             buffer = ''
             while self.is_running:
@@ -408,9 +399,8 @@ class Server:
                                     self.handle_chat(client_socket, message_content)
                                 elif message_type == 'quit':
                                     self.handle_quit(client_socket, message_content)
-                                    break  # Exit the loop after handling quit
-                                elif message_type == 'restart':
-                                    self.handle_restart(client_socket, message_content)
+                                elif message_type == 'new_game_response':
+                                    self.handle_new_game_response(client_socket, message_content)
                                 else:
                                     self.send_error(client_socket, "unknown_type", "Unknown message type.")
                             except json.JSONDecodeError:
@@ -435,13 +425,14 @@ class Server:
                         # Notify remaining players
                         for player in game.players:
                             response = {
-                                "type": "quit_ack",
+                                "type": "opponent_disconnected",
                                 "data": {
-                                    "status": "success",
-                                    "message": f"{client_info['username']} has left the game."
+                                    "message": f"{client_info['username']} has disconnected.",
+                                    "game_over": True
                                 }
                             }
                             self.send_message(player['socket'], response)
+                            logging.debug(f"Sent opponent_disconnected to {player['username']}: {response}")
                         if not game.players:
                             self.games.pop(game_id, None)
                             logging.info(f"Game {game_id} has been removed due to no remaining players.")
@@ -469,7 +460,7 @@ class Server:
         logging.info("Server has been stopped.")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Tic-Tac-Toe Server")
+    parser = argparse.ArgumentParser(description="TCP Server")
     parser.add_argument('--host', default='127.0.0.1', help='Server host')
     parser.add_argument('--port', type=int, default=65432, help='Server port')
     parser.add_argument('--max-workers', type=int, default=10, help='Maximum number of worker threads')
