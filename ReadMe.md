@@ -322,4 +322,7 @@ To run the test scripts verifying the functionality:
 ```
 python3 test_turn_based_gameplay.py
 ```
+Key Security issues
+
+Key security issues in the game include the lack of authentication and authorization, which allows unauthorized users to connect and potentially impersonate others; unencrypted network communication, making data vulnerable to interception and man-in-the-middle attacks; insufficient input validation on the server side, leading to risks of injection attacks; susceptibility to denial-of-service (DoS) attacks due to the absence of rate limiting and resource management; and reliance on client-side input for critical game logic, enabling cheating through manipulated dat
 
