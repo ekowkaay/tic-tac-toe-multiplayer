@@ -358,3 +358,209 @@
 2024-11-11 17:23:07,160 - ERROR - [ThreadPoolExecutor-0_0] Socket error with ('127.0.0.1', 54331): [WinError 10054] An existing connection was forcibly closed by the remote host
 2024-11-11 17:23:07,160 - INFO - Game 4c8de105-0c11-4e9c-9a92-2b41c4dbc3d2 has been removed due to no remaining players.
 2024-11-11 17:23:07,160 - INFO - [ThreadPoolExecutor-0_0] Connection closed with ('127.0.0.1', 54331)
+2024-11-26 12:45:43,064 - INFO - Server listening on 127.0.0.1:65432
+2024-11-26 12:45:52,628 - INFO - [ThreadPoolExecutor-0_0] Connection established with ('127.0.0.1', 50684)
+2024-11-26 12:45:52,628 - INFO - Alice with UUID 2eaf4c4b-ea8c-4458-ac99-2028c672e1f5 has joined the server.
+2024-11-26 12:45:52,628 - DEBUG - Assigning Alice to a game.
+2024-11-26 12:45:52,628 - DEBUG - Sent to ('127.0.0.1', 50684): {'type': 'join_ack', 'data': {'status': 'waiting', 'message': 'Waiting for an opponent...', 'uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5'}}
+2024-11-26 12:45:52,628 - INFO - Alice is waiting for an opponent.
+2024-11-26 12:46:16,193 - INFO - [ThreadPoolExecutor-0_1] Connection established with ('127.0.0.1', 50687)
+2024-11-26 12:46:16,193 - INFO - Bob with UUID a0ae9198-b3ad-4d7d-b5ea-392f513480ea has joined the server.
+2024-11-26 12:46:16,193 - DEBUG - Assigning Bob to a game.
+2024-11-26 12:46:16,193 - DEBUG - Sent to ('127.0.0.1', 50684): {'type': 'join_ack', 'data': {'status': 'success', 'game_id': 'e401751f-1292-40e3-bcec-d61ce252cfb1', 'player_symbol': 'X', 'uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5'}}
+2024-11-26 12:46:16,193 - DEBUG - Sent join_ack to ('127.0.0.1', 50684): {'type': 'join_ack', 'data': {'status': 'success', 'game_id': 'e401751f-1292-40e3-bcec-d61ce252cfb1', 'player_symbol': 'X', 'uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5'}}
+2024-11-26 12:46:16,193 - DEBUG - Sent to ('127.0.0.1', 50687): {'type': 'join_ack', 'data': {'status': 'success', 'game_id': 'e401751f-1292-40e3-bcec-d61ce252cfb1', 'player_symbol': 'O', 'uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea'}}
+2024-11-26 12:46:16,193 - DEBUG - Sent join_ack to ('127.0.0.1', 50687): {'type': 'join_ack', 'data': {'status': 'success', 'game_id': 'e401751f-1292-40e3-bcec-d61ce252cfb1', 'player_symbol': 'O', 'uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea'}}
+2024-11-26 12:46:16,193 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1 started between Alice and Bob
+2024-11-26 12:46:23,654 - DEBUG - Handling move: {'game_id': 'e401751f-1292-40e3-bcec-d61ce252cfb1', 'position': [0, 1], 'uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5'}
+2024-11-26 12:46:23,654 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1: Alice placed 'X' at position (0, 1).
+2024-11-26 12:46:23,654 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1: It is now Bob's turn.
+2024-11-26 12:46:23,654 - DEBUG - Move result: {'status': 'success'}
+2024-11-26 12:46:23,654 - DEBUG - Sent to ('127.0.0.1', 50684): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', 'X', ''], ['', '', ''], ['', '', '']], 'next_player_uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 12:46:23,654 - DEBUG - Sent move_ack to Alice: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', 'X', ''], ['', '', ''], ['', '', '']], 'next_player_uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 12:46:23,654 - DEBUG - Sent to ('127.0.0.1', 50687): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', 'X', ''], ['', '', ''], ['', '', '']], 'next_player_uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 12:46:23,654 - DEBUG - Sent move_ack to Bob: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', 'X', ''], ['', '', ''], ['', '', '']], 'next_player_uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 12:46:25,014 - DEBUG - Handling move: {'game_id': 'e401751f-1292-40e3-bcec-d61ce252cfb1', 'position': [1, 1], 'uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea'}
+2024-11-26 12:46:25,014 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1: Bob placed 'O' at position (1, 1).
+2024-11-26 12:46:25,014 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1: It is now Alice's turn.
+2024-11-26 12:46:25,014 - DEBUG - Move result: {'status': 'success'}
+2024-11-26 12:46:25,014 - DEBUG - Sent to ('127.0.0.1', 50684): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', 'X', ''], ['', 'O', ''], ['', '', '']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 12:46:25,014 - DEBUG - Sent move_ack to Alice: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', 'X', ''], ['', 'O', ''], ['', '', '']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 12:46:25,014 - DEBUG - Sent to ('127.0.0.1', 50687): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', 'X', ''], ['', 'O', ''], ['', '', '']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 12:46:25,014 - DEBUG - Sent move_ack to Bob: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', 'X', ''], ['', 'O', ''], ['', '', '']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 12:46:26,054 - DEBUG - Handling move: {'game_id': 'e401751f-1292-40e3-bcec-d61ce252cfb1', 'position': [2, 2], 'uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5'}
+2024-11-26 12:46:26,054 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1: Alice placed 'X' at position (2, 2).
+2024-11-26 12:46:26,054 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1: It is now Bob's turn.
+2024-11-26 12:46:26,054 - DEBUG - Move result: {'status': 'success'}
+2024-11-26 12:46:26,054 - DEBUG - Sent to ('127.0.0.1', 50684): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', 'X', ''], ['', 'O', ''], ['', '', 'X']], 'next_player_uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 12:46:26,054 - DEBUG - Sent move_ack to Alice: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', 'X', ''], ['', 'O', ''], ['', '', 'X']], 'next_player_uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 12:46:26,054 - DEBUG - Sent to ('127.0.0.1', 50687): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', 'X', ''], ['', 'O', ''], ['', '', 'X']], 'next_player_uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 12:46:26,054 - DEBUG - Sent move_ack to Bob: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', 'X', ''], ['', 'O', ''], ['', '', 'X']], 'next_player_uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 12:46:27,073 - DEBUG - Handling move: {'game_id': 'e401751f-1292-40e3-bcec-d61ce252cfb1', 'position': [1, 2], 'uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea'}
+2024-11-26 12:46:27,073 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1: Bob placed 'O' at position (1, 2).
+2024-11-26 12:46:27,073 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1: It is now Alice's turn.
+2024-11-26 12:46:27,073 - DEBUG - Move result: {'status': 'success'}
+2024-11-26 12:46:27,073 - DEBUG - Sent to ('127.0.0.1', 50684): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', 'X', ''], ['', 'O', 'O'], ['', '', 'X']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 12:46:27,073 - DEBUG - Sent move_ack to Alice: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', 'X', ''], ['', 'O', 'O'], ['', '', 'X']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 12:46:27,073 - DEBUG - Sent to ('127.0.0.1', 50687): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', 'X', ''], ['', 'O', 'O'], ['', '', 'X']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 12:46:27,073 - DEBUG - Sent move_ack to Bob: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', 'X', ''], ['', 'O', 'O'], ['', '', 'X']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 12:46:27,682 - DEBUG - Handling move: {'game_id': 'e401751f-1292-40e3-bcec-d61ce252cfb1', 'position': [1, 0], 'uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5'}
+2024-11-26 12:46:27,698 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1: Alice placed 'X' at position (1, 0).
+2024-11-26 12:46:27,698 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1: It is now Bob's turn.
+2024-11-26 12:46:27,698 - DEBUG - Move result: {'status': 'success'}
+2024-11-26 12:46:27,698 - DEBUG - Sent to ('127.0.0.1', 50684): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', 'X', ''], ['X', 'O', 'O'], ['', '', 'X']], 'next_player_uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 12:46:27,698 - DEBUG - Sent move_ack to Alice: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', 'X', ''], ['X', 'O', 'O'], ['', '', 'X']], 'next_player_uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 12:46:27,698 - DEBUG - Sent to ('127.0.0.1', 50687): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', 'X', ''], ['X', 'O', 'O'], ['', '', 'X']], 'next_player_uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 12:46:27,698 - DEBUG - Sent move_ack to Bob: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', 'X', ''], ['X', 'O', 'O'], ['', '', 'X']], 'next_player_uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 12:46:28,560 - DEBUG - Handling move: {'game_id': 'e401751f-1292-40e3-bcec-d61ce252cfb1', 'position': [0, 0], 'uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea'}
+2024-11-26 12:46:28,560 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1: Bob placed 'O' at position (0, 0).
+2024-11-26 12:46:28,560 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1: It is now Alice's turn.
+2024-11-26 12:46:28,560 - DEBUG - Move result: {'status': 'success'}
+2024-11-26 12:46:28,566 - DEBUG - Sent to ('127.0.0.1', 50684): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', 'X', ''], ['X', 'O', 'O'], ['', '', 'X']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 12:46:28,566 - DEBUG - Sent move_ack to Alice: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', 'X', ''], ['X', 'O', 'O'], ['', '', 'X']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 12:46:28,566 - DEBUG - Sent to ('127.0.0.1', 50687): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', 'X', ''], ['X', 'O', 'O'], ['', '', 'X']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 12:46:28,566 - DEBUG - Sent move_ack to Bob: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', 'X', ''], ['X', 'O', 'O'], ['', '', 'X']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 12:46:29,327 - DEBUG - Handling move: {'game_id': 'e401751f-1292-40e3-bcec-d61ce252cfb1', 'position': [0, 2], 'uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5'}
+2024-11-26 12:46:29,327 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1: Alice placed 'X' at position (0, 2).
+2024-11-26 12:46:29,327 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1: It is now Bob's turn.
+2024-11-26 12:46:29,327 - DEBUG - Move result: {'status': 'success'}
+2024-11-26 12:46:29,327 - DEBUG - Sent to ('127.0.0.1', 50684): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', 'X', 'X'], ['X', 'O', 'O'], ['', '', 'X']], 'next_player_uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 12:46:29,327 - DEBUG - Sent move_ack to Alice: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', 'X', 'X'], ['X', 'O', 'O'], ['', '', 'X']], 'next_player_uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 12:46:29,327 - DEBUG - Sent to ('127.0.0.1', 50687): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', 'X', 'X'], ['X', 'O', 'O'], ['', '', 'X']], 'next_player_uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 12:46:29,327 - DEBUG - Sent move_ack to Bob: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', 'X', 'X'], ['X', 'O', 'O'], ['', '', 'X']], 'next_player_uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 12:46:30,383 - DEBUG - Handling move: {'game_id': 'e401751f-1292-40e3-bcec-d61ce252cfb1', 'position': [2, 1], 'uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea'}
+2024-11-26 12:46:30,383 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1: Bob placed 'O' at position (2, 1).
+2024-11-26 12:46:30,383 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1: It is now Alice's turn.
+2024-11-26 12:46:30,383 - DEBUG - Move result: {'status': 'success'}
+2024-11-26 12:46:30,383 - DEBUG - Sent to ('127.0.0.1', 50684): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', 'X', 'X'], ['X', 'O', 'O'], ['', 'O', 'X']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 12:46:30,383 - DEBUG - Sent move_ack to Alice: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', 'X', 'X'], ['X', 'O', 'O'], ['', 'O', 'X']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 12:46:30,383 - DEBUG - Sent to ('127.0.0.1', 50687): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', 'X', 'X'], ['X', 'O', 'O'], ['', 'O', 'X']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 12:46:30,389 - DEBUG - Sent move_ack to Bob: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', 'X', 'X'], ['X', 'O', 'O'], ['', 'O', 'X']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 12:46:31,152 - DEBUG - Handling move: {'game_id': 'e401751f-1292-40e3-bcec-d61ce252cfb1', 'position': [2, 0], 'uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5'}
+2024-11-26 12:46:31,152 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1: Alice placed 'X' at position (2, 0).
+2024-11-26 12:46:31,152 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1: The game ended in a draw.
+2024-11-26 12:46:31,152 - DEBUG - Move result: {'status': 'success'}
+2024-11-26 12:46:31,152 - DEBUG - Sent to ('127.0.0.1', 50684): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', 'X', 'X'], ['X', 'O', 'O'], ['X', 'O', 'X']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': 'draw'}}
+2024-11-26 12:46:31,152 - DEBUG - Sent move_ack to Alice: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', 'X', 'X'], ['X', 'O', 'O'], ['X', 'O', 'X']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': 'draw'}}
+2024-11-26 12:46:31,152 - DEBUG - Sent to ('127.0.0.1', 50687): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', 'X', 'X'], ['X', 'O', 'O'], ['X', 'O', 'X']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': 'draw'}}
+2024-11-26 12:46:31,152 - DEBUG - Sent move_ack to Bob: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', 'X', 'X'], ['X', 'O', 'O'], ['X', 'O', 'X']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': 'draw'}}
+2024-11-26 12:46:31,152 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1 ended. Winner: draw
+2024-11-26 12:46:31,152 - DEBUG - Sent to ('127.0.0.1', 50684): {'type': 'game_over', 'data': {'winner': 'draw', 'game_id': 'e401751f-1292-40e3-bcec-d61ce252cfb1'}}
+2024-11-26 12:46:31,152 - DEBUG - Sent game_over to Alice: {'type': 'game_over', 'data': {'winner': 'draw', 'game_id': 'e401751f-1292-40e3-bcec-d61ce252cfb1'}}
+2024-11-26 12:46:31,152 - DEBUG - Sent to ('127.0.0.1', 50687): {'type': 'game_over', 'data': {'winner': 'draw', 'game_id': 'e401751f-1292-40e3-bcec-d61ce252cfb1'}}
+2024-11-26 12:46:31,152 - DEBUG - Sent game_over to Bob: {'type': 'game_over', 'data': {'winner': 'draw', 'game_id': 'e401751f-1292-40e3-bcec-d61ce252cfb1'}}
+2024-11-26 12:46:39,655 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1 has been reset for a new round.
+2024-11-26 12:46:39,655 - DEBUG - Sent to ('127.0.0.1', 50684): {'type': 'new_game', 'data': {'status': 'success', 'game_state': [['', '', ''], ['', '', ''], ['', '', '']], 'next_player_uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea', 'next_player_username': 'Bob'}}
+2024-11-26 12:46:39,655 - DEBUG - Sent new_game to Alice: {'type': 'new_game', 'data': {'status': 'success', 'game_state': [['', '', ''], ['', '', ''], ['', '', '']], 'next_player_uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea', 'next_player_username': 'Bob'}}
+2024-11-26 12:46:39,655 - DEBUG - Sent to ('127.0.0.1', 50687): {'type': 'new_game', 'data': {'status': 'success', 'game_state': [['', '', ''], ['', '', ''], ['', '', '']], 'next_player_uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea', 'next_player_username': 'Bob'}}
+2024-11-26 12:46:39,667 - DEBUG - Sent new_game to Bob: {'type': 'new_game', 'data': {'status': 'success', 'game_state': [['', '', ''], ['', '', ''], ['', '', '']], 'next_player_uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea', 'next_player_username': 'Bob'}}
+2024-11-26 12:46:40,947 - DEBUG - Handling move: {'game_id': 'e401751f-1292-40e3-bcec-d61ce252cfb1', 'position': [1, 1], 'uuid': 'a0ae9198-b3ad-4d7d-b5ea-392f513480ea'}
+2024-11-26 12:46:40,947 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1: Bob placed 'O' at position (1, 1).
+2024-11-26 12:46:40,947 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1: It is now Alice's turn.
+2024-11-26 12:46:40,947 - DEBUG - Move result: {'status': 'success'}
+2024-11-26 12:46:40,947 - DEBUG - Sent to ('127.0.0.1', 50684): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', '', ''], ['', 'O', ''], ['', '', '']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 12:46:40,947 - DEBUG - Sent move_ack to Alice: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', '', ''], ['', 'O', ''], ['', '', '']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 12:46:40,947 - DEBUG - Sent to ('127.0.0.1', 50687): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', '', ''], ['', 'O', ''], ['', '', '']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 12:46:40,947 - DEBUG - Sent move_ack to Bob: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', '', ''], ['', 'O', ''], ['', '', '']], 'next_player_uuid': '2eaf4c4b-ea8c-4458-ac99-2028c672e1f5', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 12:46:45,113 - DEBUG - Sent to ('127.0.0.1', 50687): {'type': 'quit_ack', 'data': {'status': 'success', 'message': 'Alice has left the game.'}}
+2024-11-26 12:46:45,113 - DEBUG - Sent quit_ack to Bob: {'type': 'quit_ack', 'data': {'status': 'success', 'message': 'Alice has left the game.'}}
+2024-11-26 12:46:45,113 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1: Alice has quit the game.
+2024-11-26 12:46:45,160 - ERROR - [ThreadPoolExecutor-0_0] Socket error with ('127.0.0.1', 50684): [WinError 10054] An existing connection was forcibly closed by the remote host
+2024-11-26 12:46:45,160 - INFO - [ThreadPoolExecutor-0_0] Connection closed with ('127.0.0.1', 50684)
+2024-11-26 12:46:46,134 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1: Bob has quit the game.
+2024-11-26 12:46:46,134 - INFO - Game e401751f-1292-40e3-bcec-d61ce252cfb1 has been removed due to no remaining players.
+2024-11-26 12:46:46,181 - ERROR - [ThreadPoolExecutor-0_1] Socket error with ('127.0.0.1', 50687): [WinError 10054] An existing connection was forcibly closed by the remote host
+2024-11-26 12:46:46,181 - INFO - [ThreadPoolExecutor-0_1] Connection closed with ('127.0.0.1', 50687)
+2024-11-26 12:54:31,444 - INFO - Server shutting down...
+2024-11-26 12:54:31,444 - INFO - Server has been stopped.
+2024-11-26 14:18:57,038 - INFO - Server listening on 127.0.0.1:65432
+2024-11-26 14:19:06,201 - INFO - [ThreadPoolExecutor-0_0] Connection established with ('127.0.0.1', 50905)
+2024-11-26 14:19:06,201 - INFO - Bob with UUID 0e9af1d1-cb3f-4fe1-ac21-fc7a5535c400 has joined the server.
+2024-11-26 14:19:06,201 - DEBUG - Assigning Bob to a game.
+2024-11-26 14:19:06,201 - DEBUG - Sent to ('127.0.0.1', 50905): {'type': 'join_ack', 'data': {'status': 'waiting', 'message': 'Waiting for an opponent...', 'uuid': '0e9af1d1-cb3f-4fe1-ac21-fc7a5535c400'}}
+2024-11-26 14:19:06,201 - INFO - Bob is waiting for an opponent.
+2024-11-26 14:19:13,086 - INFO - [ThreadPoolExecutor-0_1] Connection established with ('127.0.0.1', 50906)
+2024-11-26 14:19:13,086 - INFO - Alice with UUID 3894d99c-9c8d-4f41-b241-c76751b56e17 has joined the server.
+2024-11-26 14:19:13,086 - DEBUG - Assigning Alice to a game.
+2024-11-26 14:19:13,086 - DEBUG - Sent to ('127.0.0.1', 50905): {'type': 'join_ack', 'data': {'status': 'success', 'game_id': '0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b', 'player_symbol': 'X', 'uuid': '0e9af1d1-cb3f-4fe1-ac21-fc7a5535c400'}}
+2024-11-26 14:19:13,086 - DEBUG - Sent join_ack to ('127.0.0.1', 50905): {'type': 'join_ack', 'data': {'status': 'success', 'game_id': '0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b', 'player_symbol': 'X', 'uuid': '0e9af1d1-cb3f-4fe1-ac21-fc7a5535c400'}}
+2024-11-26 14:19:13,086 - DEBUG - Sent to ('127.0.0.1', 50906): {'type': 'join_ack', 'data': {'status': 'success', 'game_id': '0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b', 'player_symbol': 'O', 'uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17'}}
+2024-11-26 14:19:13,086 - DEBUG - Sent join_ack to ('127.0.0.1', 50906): {'type': 'join_ack', 'data': {'status': 'success', 'game_id': '0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b', 'player_symbol': 'O', 'uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17'}}
+2024-11-26 14:19:13,086 - INFO - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b started between Bob and Alice
+2024-11-26 14:19:16,948 - DEBUG - Handling move: {'game_id': '0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b', 'position': [1, 1], 'uuid': '0e9af1d1-cb3f-4fe1-ac21-fc7a5535c400'}
+2024-11-26 14:19:16,948 - INFO - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b: Bob placed 'X' at position (1, 1).
+2024-11-26 14:19:16,948 - INFO - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b: It is now Alice's turn.
+2024-11-26 14:19:16,948 - DEBUG - Move result: {'status': 'success'}
+2024-11-26 14:19:16,948 - DEBUG - Sent to ('127.0.0.1', 50905): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', '', ''], ['', 'X', ''], ['', '', '']], 'next_player_uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 14:19:16,948 - DEBUG - Sent move_ack to Bob: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', '', ''], ['', 'X', ''], ['', '', '']], 'next_player_uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 14:19:16,948 - DEBUG - Sent to ('127.0.0.1', 50906): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', '', ''], ['', 'X', ''], ['', '', '']], 'next_player_uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 14:19:16,948 - DEBUG - Sent move_ack to Alice: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', '', ''], ['', 'X', ''], ['', '', '']], 'next_player_uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 14:19:17,703 - DEBUG - Handling move: {'game_id': '0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b', 'position': [1, 0], 'uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17'}
+2024-11-26 14:19:17,703 - INFO - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b: Alice placed 'O' at position (1, 0).
+2024-11-26 14:19:17,703 - INFO - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b: It is now Bob's turn.
+2024-11-26 14:19:17,703 - DEBUG - Move result: {'status': 'success'}
+2024-11-26 14:19:17,703 - DEBUG - Sent to ('127.0.0.1', 50905): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', '', ''], ['O', 'X', ''], ['', '', '']], 'next_player_uuid': '0e9af1d1-cb3f-4fe1-ac21-fc7a5535c400', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 14:19:17,703 - DEBUG - Sent move_ack to Bob: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', '', ''], ['O', 'X', ''], ['', '', '']], 'next_player_uuid': '0e9af1d1-cb3f-4fe1-ac21-fc7a5535c400', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 14:19:17,703 - DEBUG - Sent to ('127.0.0.1', 50906): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', '', ''], ['O', 'X', ''], ['', '', '']], 'next_player_uuid': '0e9af1d1-cb3f-4fe1-ac21-fc7a5535c400', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 14:19:17,703 - DEBUG - Sent move_ack to Alice: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', '', ''], ['O', 'X', ''], ['', '', '']], 'next_player_uuid': '0e9af1d1-cb3f-4fe1-ac21-fc7a5535c400', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 14:19:18,682 - DEBUG - Handling move: {'game_id': '0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b', 'position': [0, 2], 'uuid': '0e9af1d1-cb3f-4fe1-ac21-fc7a5535c400'}
+2024-11-26 14:19:18,682 - INFO - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b: Bob placed 'X' at position (0, 2).
+2024-11-26 14:19:18,682 - INFO - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b: It is now Alice's turn.
+2024-11-26 14:19:18,682 - DEBUG - Move result: {'status': 'success'}
+2024-11-26 14:19:18,682 - DEBUG - Sent to ('127.0.0.1', 50905): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', '', 'X'], ['O', 'X', ''], ['', '', '']], 'next_player_uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 14:19:18,684 - DEBUG - Sent move_ack to Bob: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', '', 'X'], ['O', 'X', ''], ['', '', '']], 'next_player_uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 14:19:18,684 - DEBUG - Sent to ('127.0.0.1', 50906): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', '', 'X'], ['O', 'X', ''], ['', '', '']], 'next_player_uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 14:19:18,684 - DEBUG - Sent move_ack to Alice: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', '', 'X'], ['O', 'X', ''], ['', '', '']], 'next_player_uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 14:19:19,558 - DEBUG - Handling move: {'game_id': '0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b', 'position': [0, 0], 'uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17'}
+2024-11-26 14:19:19,558 - INFO - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b: Alice placed 'O' at position (0, 0).
+2024-11-26 14:19:19,558 - INFO - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b: It is now Bob's turn.
+2024-11-26 14:19:19,558 - DEBUG - Move result: {'status': 'success'}
+2024-11-26 14:19:19,558 - DEBUG - Sent to ('127.0.0.1', 50905): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', '', 'X'], ['O', 'X', ''], ['', '', '']], 'next_player_uuid': '0e9af1d1-cb3f-4fe1-ac21-fc7a5535c400', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 14:19:19,558 - DEBUG - Sent move_ack to Bob: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', '', 'X'], ['O', 'X', ''], ['', '', '']], 'next_player_uuid': '0e9af1d1-cb3f-4fe1-ac21-fc7a5535c400', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 14:19:19,558 - DEBUG - Sent to ('127.0.0.1', 50906): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', '', 'X'], ['O', 'X', ''], ['', '', '']], 'next_player_uuid': '0e9af1d1-cb3f-4fe1-ac21-fc7a5535c400', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 14:19:19,558 - DEBUG - Sent move_ack to Alice: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', '', 'X'], ['O', 'X', ''], ['', '', '']], 'next_player_uuid': '0e9af1d1-cb3f-4fe1-ac21-fc7a5535c400', 'next_player_username': 'Bob', 'winner': None}}
+2024-11-26 14:19:20,559 - DEBUG - Handling move: {'game_id': '0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b', 'position': [1, 2], 'uuid': '0e9af1d1-cb3f-4fe1-ac21-fc7a5535c400'}
+2024-11-26 14:19:20,559 - INFO - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b: Bob placed 'X' at position (1, 2).
+2024-11-26 14:19:20,559 - INFO - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b: It is now Alice's turn.
+2024-11-26 14:19:20,559 - DEBUG - Move result: {'status': 'success'}
+2024-11-26 14:19:20,559 - DEBUG - Sent to ('127.0.0.1', 50905): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', '', 'X'], ['O', 'X', 'X'], ['', '', '']], 'next_player_uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 14:19:20,559 - DEBUG - Sent move_ack to Bob: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', '', 'X'], ['O', 'X', 'X'], ['', '', '']], 'next_player_uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 14:19:20,559 - DEBUG - Sent to ('127.0.0.1', 50906): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', '', 'X'], ['O', 'X', 'X'], ['', '', '']], 'next_player_uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 14:19:20,574 - DEBUG - Sent move_ack to Alice: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', '', 'X'], ['O', 'X', 'X'], ['', '', '']], 'next_player_uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 14:19:22,392 - DEBUG - Handling move: {'game_id': '0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b', 'position': [2, 0], 'uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17'}
+2024-11-26 14:19:22,392 - INFO - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b: Alice placed 'O' at position (2, 0).
+2024-11-26 14:19:22,392 - INFO - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b: Alice has won the game.
+2024-11-26 14:19:22,392 - DEBUG - Move result: {'status': 'success'}
+2024-11-26 14:19:22,392 - DEBUG - Sent to ('127.0.0.1', 50905): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', '', 'X'], ['O', 'X', 'X'], ['O', '', '']], 'next_player_uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17', 'next_player_username': 'Alice', 'winner': 'Alice'}}
+2024-11-26 14:19:22,392 - DEBUG - Sent move_ack to Bob: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', '', 'X'], ['O', 'X', 'X'], ['O', '', '']], 'next_player_uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17', 'next_player_username': 'Alice', 'winner': 'Alice'}}
+2024-11-26 14:19:22,392 - DEBUG - Sent to ('127.0.0.1', 50906): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', '', 'X'], ['O', 'X', 'X'], ['O', '', '']], 'next_player_uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17', 'next_player_username': 'Alice', 'winner': 'Alice'}}
+2024-11-26 14:19:22,408 - DEBUG - Sent move_ack to Alice: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['O', '', 'X'], ['O', 'X', 'X'], ['O', '', '']], 'next_player_uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17', 'next_player_username': 'Alice', 'winner': 'Alice'}}
+2024-11-26 14:19:22,408 - INFO - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b ended. Winner: Alice
+2024-11-26 14:19:22,408 - DEBUG - Sent to ('127.0.0.1', 50905): {'type': 'game_over', 'data': {'winner': 'Alice', 'game_id': '0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b'}}
+2024-11-26 14:19:22,408 - DEBUG - Sent game_over to Bob: {'type': 'game_over', 'data': {'winner': 'Alice', 'game_id': '0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b'}}
+2024-11-26 14:19:22,408 - DEBUG - Sent to ('127.0.0.1', 50906): {'type': 'game_over', 'data': {'winner': 'Alice', 'game_id': '0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b'}}
+2024-11-26 14:19:22,408 - DEBUG - Sent game_over to Alice: {'type': 'game_over', 'data': {'winner': 'Alice', 'game_id': '0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b'}}
+2024-11-26 14:19:24,336 - DEBUG - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b: Received new game request from 3894d99c-9c8d-4f41-b241-c76751b56e17.
+2024-11-26 14:19:24,336 - DEBUG - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b: Started new game timer.
+2024-11-26 14:19:25,800 - DEBUG - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b: Received new game request from 0e9af1d1-cb3f-4fe1-ac21-fc7a5535c400.
+2024-11-26 14:19:25,800 - INFO - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b has been reset for a new round.
+2024-11-26 14:19:25,800 - DEBUG - Sent to ('127.0.0.1', 50905): {'type': 'new_game', 'data': {'status': 'success', 'game_state': [['', '', ''], ['', '', ''], ['', '', '']], 'next_player_uuid': '0e9af1d1-cb3f-4fe1-ac21-fc7a5535c400', 'next_player_username': 'Bob'}}
+2024-11-26 14:19:25,800 - DEBUG - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b: Sent new_game to Bob: {'type': 'new_game', 'data': {'status': 'success', 'game_state': [['', '', ''], ['', '', ''], ['', '', '']], 'next_player_uuid': '0e9af1d1-cb3f-4fe1-ac21-fc7a5535c400', 'next_player_username': 'Bob'}}
+2024-11-26 14:19:25,800 - DEBUG - Sent to ('127.0.0.1', 50906): {'type': 'new_game', 'data': {'status': 'success', 'game_state': [['', '', ''], ['', '', ''], ['', '', '']], 'next_player_uuid': '0e9af1d1-cb3f-4fe1-ac21-fc7a5535c400', 'next_player_username': 'Bob'}}
+2024-11-26 14:19:25,800 - DEBUG - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b: Sent new_game to Alice: {'type': 'new_game', 'data': {'status': 'success', 'game_state': [['', '', ''], ['', '', ''], ['', '', '']], 'next_player_uuid': '0e9af1d1-cb3f-4fe1-ac21-fc7a5535c400', 'next_player_username': 'Bob'}}
+2024-11-26 14:19:25,803 - INFO - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b: All players have requested a new game.
+2024-11-26 14:19:27,194 - DEBUG - Handling move: {'game_id': '0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b', 'position': [2, 1], 'uuid': '0e9af1d1-cb3f-4fe1-ac21-fc7a5535c400'}
+2024-11-26 14:19:27,194 - INFO - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b: Bob placed 'X' at position (2, 1).
+2024-11-26 14:19:27,194 - INFO - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b: It is now Alice's turn.
+2024-11-26 14:19:27,194 - DEBUG - Move result: {'status': 'success'}
+2024-11-26 14:19:27,194 - DEBUG - Sent to ('127.0.0.1', 50905): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', '', ''], ['', '', ''], ['', 'X', '']], 'next_player_uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 14:19:27,194 - DEBUG - Sent move_ack to Bob: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', '', ''], ['', '', ''], ['', 'X', '']], 'next_player_uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 14:19:27,194 - DEBUG - Sent to ('127.0.0.1', 50906): {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', '', ''], ['', '', ''], ['', 'X', '']], 'next_player_uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 14:19:27,202 - DEBUG - Sent move_ack to Alice: {'type': 'move_ack', 'data': {'status': 'success', 'game_state': [['', '', ''], ['', '', ''], ['', 'X', '']], 'next_player_uuid': '3894d99c-9c8d-4f41-b241-c76751b56e17', 'next_player_username': 'Alice', 'winner': None}}
+2024-11-26 14:24:00,172 - ERROR - [ThreadPoolExecutor-0_1] Socket error with ('127.0.0.1', 50906): [WinError 10054] An existing connection was forcibly closed by the remote host
+2024-11-26 14:24:00,172 - DEBUG - Sent to ('127.0.0.1', 50905): {'type': 'opponent_disconnected', 'data': {'message': 'Alice has disconnected.', 'game_over': True}}
+2024-11-26 14:24:00,172 - DEBUG - Sent opponent_disconnected to Bob: {'type': 'opponent_disconnected', 'data': {'message': 'Alice has disconnected.', 'game_over': True}}
+2024-11-26 14:24:00,172 - INFO - [ThreadPoolExecutor-0_1] Connection closed with ('127.0.0.1', 50906)
+2024-11-26 14:24:02,514 - ERROR - [ThreadPoolExecutor-0_0] Socket error with ('127.0.0.1', 50905): [WinError 10054] An existing connection was forcibly closed by the remote host
+2024-11-26 14:24:02,514 - INFO - Game 0d7605e5-b4d9-4ac6-bae4-b8a35e0d536b has been removed due to no remaining players.
+2024-11-26 14:24:02,514 - INFO - [ThreadPoolExecutor-0_0] Connection closed with ('127.0.0.1', 50905)
