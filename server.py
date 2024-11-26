@@ -103,7 +103,7 @@ class Game:
 
     def reset_game(self):
         self.board = [['' for _ in range(3)] for _ in range(3)]
-        self.current_player_index = 0
+        self.current_player_index = (self.current_player_index + 1) % len(self.players)  # Toggle to the next player
         self.winner = None
         logging.info(f"Game {self.game_id} has been reset for a new round.")
 
@@ -235,6 +235,7 @@ class Server:
         self.assign_to_game(client_info)
 
     def handle_move(self, client_socket, data):
+        logging.debug(f"Handling move: {data}")
         game_id = data.get('game_id')
         position = data.get('position')
         player_uuid = data.get('uuid')
@@ -250,6 +251,8 @@ class Server:
 
         # Process the move
         result = game.make_move(player_uuid, position)
+        logging.debug(f"Move result: {result}")
+
         if result['status'] == 'success':
             # Broadcast the updated game state to all players
             for player in game.players:
@@ -280,7 +283,6 @@ class Server:
                     logging.debug(f"Sent game_over to {player['username']}: {response}")
         else:
             self.send_error(client_socket, result['code'], result['message'])
-
     def handle_chat(self, client_socket, data):
         game_id = data.get('game_id')
         message = data.get('message')

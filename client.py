@@ -63,13 +63,20 @@ class Client:
         self.quit_button.pack(side='left', padx=5)
 
     def on_cell_click(self, row, col):
-        if self.game_over or not self.my_turn:
+        logging.debug(f"Cell clicked at ({row}, {col})")
+        if self.game_over:
+            logging.debug("Game is over. Click ignored.")
+            return
+        if not self.my_turn:
+            logging.debug("Not your turn. Click ignored.")
             return
         if self.game_state[row][col]:
+            logging.debug(f"Cell ({row}, {col}) is already occupied.")
             messagebox.showwarning("Invalid Move", "Position already occupied.")
             return
         self.send_move([row, col])
         self.my_turn = False  # Prevent multiple rapid clicks
+        logging.debug(f"Move sent for cell ({row}, {col}). Waiting for opponent.")
 
     def open_chat_window(self):
         if not hasattr(self, 'chat_window') or not self.chat_window.winfo_exists():
@@ -97,6 +104,7 @@ class Client:
                 }
             })
             self.chat_entry.delete(0, tk.END)
+            logging.debug(f"Sent chat message: {message_text}")
 
     def quit_game(self):
         if self.game_id and self.player_uuid:
@@ -144,6 +152,7 @@ class Client:
             }
         }
         self.send_message(message)
+        logging.debug(f"Sent join request: {message}")
 
     def send_move(self, position):
         message = {
@@ -155,6 +164,7 @@ class Client:
             }
         }
         self.send_message(message)
+        logging.debug(f"Sent move message: {message}")
 
     def send_quit(self):
         message = {
@@ -165,6 +175,7 @@ class Client:
             }
         }
         self.send_message(message)
+        logging.debug(f"Sent quit message: {message}")
 
     def receive_messages(self):
         self.socket.settimeout(None)  # Disable socket timeout
@@ -180,17 +191,19 @@ class Client:
                             try:
                                 message_data = json.loads(message_str)
                                 self.message_queue.put(message_data)
+                                logging.debug(f"Received message: {message_data}")
                             except json.JSONDecodeError as e:
                                 logging.error(f"JSON decode error: {e}")
                 else:
                     # Server closed connection
                     self.connected = False
-                    messagebox.showerror("Disconnected", "Server closed the connection.")
+                    self.root.after(0, lambda: messagebox.showerror("Disconnected", "Server closed the connection."))
+                    logging.error("Server closed the connection.")
                     break
             except socket.error as e:
                 logging.error(f"Socket error: {e}")
                 self.connected = False
-                messagebox.showerror("Connection Error", f"Socket error: {e}")
+                self.root.after(0, lambda: messagebox.showerror("Connection Error", f"Socket error: {e}"))
                 break
 
     def receive_message(self, timeout=None):
@@ -214,10 +227,12 @@ class Client:
             self.update_status(f"Game started! You are '{self.player_symbol}'.")
             if self.player_symbol == 'X':
                 self.my_turn = True
-                self.update_status(f"Your turn.")
+                self.update_status("Your turn.")
+                logging.debug("It's your turn.")
             else:
                 self.my_turn = False
-                self.update_status(f"Waiting for opponent's move.")
+                self.update_status("Waiting for opponent's move.")
+                logging.debug("Waiting for opponent's turn.")
             self.chat_button.config(state='normal')
             self.quit_button.config(state='normal')
             logging.info(f"Joined game {self.game_id} as '{self.player_symbol}' with UUID {self.player_uuid}.")
@@ -245,30 +260,37 @@ class Client:
                 else:
                     self.update_status(f"{winner} has won the game.")
                 self.game_over = True
-                self.prompt_new_game(winner)
+                # Removed duplicate prompt
+                # self.prompt_new_game(winner)
             else:
                 if next_player_uuid == self.player_uuid:
                     self.my_turn = True
                     self.update_status("Your turn.")
+                    logging.debug("It's your turn.")
                 else:
                     self.my_turn = False
                     self.update_status("Waiting for opponent's move.")
+                    logging.debug("Waiting for opponent's turn.")
         else:
             error_message = data.get('message', 'Move failed.')
             messagebox.showerror("Move Error", error_message)
+            logging.error(f"Move error: {error_message}")
             error_code = data.get('code')
             if error_code in ['invalid_move', 'invalid_position']:
                 self.my_turn = True  # Allow the player to try again
+                logging.debug("Allowing player to try again.")
 
     def handle_chat_broadcast(self, data):
         logging.debug(f"Received chat_broadcast: {data}")
         username = data.get('username')
         message = data.get('message')
         if hasattr(self, 'chat_window') and self.chat_window.winfo_exists():
+            timestamp = time.strftime('%H:%M:%S', time.localtime())
             self.chat_text.config(state='normal')
-            self.chat_text.insert(tk.END, f"{username}: {message}\n")
+            self.chat_text.insert(tk.END, f"[{timestamp}] {username}: {message}\n")
             self.chat_text.config(state='disabled')
             self.chat_text.see(tk.END)
+            logging.debug(f"Displayed chat message from {username}: {message}")
 
     def handle_quit_ack(self, data):
         logging.debug(f"Received quit_ack: {data}")
@@ -294,24 +316,32 @@ class Client:
         logging.debug(f"Received new_game: {data}")
         status = data.get('status')
         game_state = data.get('game_state')
-        next_player_uuid = data.get('next_player_uuid')
+        next_player_username = data.get('next_player_username')
+
         self.game_state = game_state
         self.game_over = False
-        self.render_game_board()
-        if next_player_uuid == self.player_uuid:
+
+        # Set 'my_turn' based on 'next_player_username' instead of 'next_player_uuid'
+        if next_player_username == self.username:
             self.my_turn = True
             self.update_status("Your turn.")
+            logging.debug("It's your turn in the new game.")
         else:
             self.my_turn = False
             self.update_status("Waiting for opponent's move.")
+            logging.debug("Waiting for opponent's turn in the new game.")
+
+        self.render_game_board()
 
     def handle_error(self, data):
         logging.debug(f"Received error: {data}")
         error_code = data.get('code')
         message = data.get('message')
         messagebox.showerror("Server Error", f"[{error_code}] {message}")
+        logging.error(f"Server error [{error_code}]: {message}")
         if error_code in ['invalid_move', 'invalid_position']:
             self.my_turn = True  # Allow the player to try again
+            logging.debug("Allowing player to try again after error.")
 
     def handle_opponent_disconnected(self, data):
         logging.debug(f"Received opponent_disconnected: {data}")
@@ -324,7 +354,12 @@ class Client:
 
     def prompt_new_game(self, winner=None, message=None):
         if winner == 'draw' or winner:
-            prompt_message = f"{winner} has won the game!" if winner != 'draw' else "The game ended in a draw."
+            if winner == 'draw':
+                prompt_message = "The game ended in a draw."
+            elif winner == self.username:
+                prompt_message = "Congratulations, you won the game!"
+            else:
+                prompt_message = f"{winner} has won the game."
         elif message:
             prompt_message = message
         else:
@@ -347,6 +382,7 @@ class Client:
         }
         self.send_message(message)
         self.update_status("Waiting for opponent's response to start a new game...")
+        logging.debug(f"Sent new_game_response: {message}")
 
     def send_new_game_quit(self):
         message = {
@@ -358,37 +394,43 @@ class Client:
             }
         }
         self.send_message(message)
+        logging.debug(f"Sent new_game_response to quit: {message}")
         self.quit_game()
 
     def handle_server_message(self):
         while self.connected:
             message = self.receive_message()
             if message:
-                message_type = message.get('type')
-                data = message.get('data')
-                if message_type == 'join_ack':
-                    self.handle_join_ack(data)
-                elif message_type == 'move_ack':
-                    self.handle_move_ack(data)
-                elif message_type == 'chat_broadcast':
-                    self.handle_chat_broadcast(data)
-                elif message_type == 'quit_ack':
-                    self.handle_quit_ack(data)
-                elif message_type == 'game_over':
-                    self.handle_game_over(data)
-                elif message_type == 'new_game':
-                    self.handle_new_game(data)
-                elif message_type == 'opponent_disconnected':
-                    self.handle_opponent_disconnected(data)
-                elif message_type == 'error':
-                    self.handle_error(data)
-                else:
-                    logging.warning(f"Unknown message type: {message_type}")
+                # Schedule the message processing on the main thread
+                self.root.after(0, self.process_message, message)
             else:
                 continue  # Continue waiting for messages
 
+    def process_message(self, message):
+        message_type = message.get('type')
+        data = message.get('data')
+        if message_type == 'join_ack':
+            self.handle_join_ack(data)
+        elif message_type == 'move_ack':
+            self.handle_move_ack(data)
+        elif message_type == 'chat_broadcast':
+            self.handle_chat_broadcast(data)
+        elif message_type == 'quit_ack':
+            self.handle_quit_ack(data)
+        elif message_type == 'game_over':
+            self.handle_game_over(data)
+        elif message_type == 'new_game':
+            self.handle_new_game(data)
+        elif message_type == 'opponent_disconnected':
+            self.handle_opponent_disconnected(data)
+        elif message_type == 'error':
+            self.handle_error(data)
+        else:
+            logging.warning(f"Unknown message type: {message_type}")
+
     def update_status(self, message):
         self.status_label.config(text=message)
+        logging.debug(f"Status updated: {message}")
 
     def render_game_board(self):
         for row in range(3):
@@ -400,6 +442,7 @@ class Client:
                     btn.config(state='disabled')
                 else:
                     btn.config(state='normal')
+        logging.debug("Rendered game board.")
 
     def start_gui(self):
         self.root.protocol("WM_DELETE_WINDOW", self.quit_game)
@@ -417,7 +460,6 @@ class Client:
             self.disconnect()
 
     def quit_game(self):
-
         if self.game_id and self.player_uuid:
             self.send_quit()
         self.connected = False  # Ensure that the message-handling loop exits
