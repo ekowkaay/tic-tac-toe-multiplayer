@@ -16,15 +16,27 @@ The goal of this project is to create a network-based multiplayer Tic-Tac-Toe ga
 ### 1. Run the Server
 Start the server by running:
 ```bash
-python server.py
+python server.py -p PORT
+```
+Example:
+```bash
+python server.py -p 65432
 ```
 The server listens for two clients to connect and manages the game.
 
 ### 2. Run the Clients
 On each client machine, run the client:
 ```bash
-python client.py
+python client.py -i SERVER_IP/DNS -p PORT [--username USERNAME] [--avatar AVATAR]
 ```
+
+Example:
+```bash
+python client.py -i 127.0.0.1 -p 65432 --username Alice --avatar hero.png
+```
+
+
+
 Each client connects to the server, and the game begins once both clients are connected.
 
 ## How to Play
