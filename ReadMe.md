@@ -347,4 +347,19 @@ I aim to implement a smoother game reset process with detailed feedback about th
 - Improve Turn Management:
  implementing turn timers to keep the game engaging and fair.
 
+## Retrospective
+
+### What Went Well
+
+1. Core Functionality: The client and server implementations successfully enabled multiplayer Tic-Tac-Toe games, with essential features like move validation, turn management, and game state synchronization. Players could join, play, and reset games, showcasing a robust foundational structure.
+
+2. Thread-Safe Server Design: The use of threading and locks on the server side ensured stable and thread-safe operations, allowing for multiple clients to connect and interact concurrently.
+
+3. Logging and Debugging: Detailed logging in both client and server implementations was invaluable for tracking issues, especially around synchronization and state management.
+
+### What could be improved
+1. Game Reset Flow: Although functional, the reset process could be made more consistent, particularly by ensuring symbols, turns, and game states are always correctly aligned across clients.
+
+2. Security: Communication between the client and server was not encrypted, leaving data vulnerable. Implementing TLS encryption would be a key improvement to ensure secure communication.
+
 
