@@ -344,7 +344,7 @@ Key security issues in the game include the lack of authentication and authoriza
 I plan to integrate encryption for all client-server communications using secure protocols like TLS to protect player data and game information.
 - Enhance Game Over Flow: 
 I aim to implement a smoother game reset process with detailed feedback about the previous game, ensuring a seamless transition to new matches without disrupting the user experience.
-- Improve Turn Management
+- Improve Turn Management:
  implementing turn timers to keep the game engaging and fair.
 
 
