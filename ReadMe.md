@@ -362,4 +362,8 @@ I aim to implement a smoother game reset process with detailed feedback about th
 
 2. Security: Communication between the client and server was not encrypted, leaving data vulnerable. Implementing TLS encryption would be a key improvement to ensure secure communication.
 
+3. Turn Management Synchronization: Issues with turn management after game resets highlighted the need for stricter synchronization mechanisms between the client and server, particularly around acknowledgment messages and UI updates.
+
+4. UI Feedback: While functional, the UI lacked clarity in some scenarios (e.g., incorrect "Your turn" status after a move). Enhanced visual feedback and better error messages would greatly improve the player experience.
+
 
