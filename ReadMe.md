@@ -338,3 +338,13 @@ python3 test_turn_based_gameplay.py
 
 Key security issues in the game include the lack of authentication and authorization, which allows unauthorized users to connect and potentially impersonate others; unencrypted network communication, making data vulnerable to interception and man-in-the-middle attacks; insufficient input validation on the server side, leading to risks of injection attacks; susceptibility to denial-of-service (DoS) attacks due to the absence of rate limiting and resource management; and reliance on client-side input for critical game logic, enabling cheating through manipulated dat
 
+## Roadmap
+
+- Security:
+I plan to integrate encryption for all client-server communications using secure protocols like TLS to protect player data and game information.
+- Enhance Game Over Flow: 
+I aim to implement a smoother game reset process with detailed feedback about the previous game, ensuring a seamless transition to new matches without disrupting the user experience.
+- Improve Turn Management
+ implementing turn timers to keep the game engaging and fair.
+
+
